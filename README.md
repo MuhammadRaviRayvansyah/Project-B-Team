@@ -18,19 +18,12 @@ End-user merupakan pengguna yang menggunakan barang dengan melakukan peminjaman 
 ### Alur Peminjaman
 
 Login  
-↓  
 Lihat / Cari Barang  
-↓  
 Pilih Barang  
-↓  
 Ajukan Peminjaman  
-↓  
 Menunggu Persetujuan Admin  
-↓  
 Disetujui / Ditolak  
-↓  
 Pantau Peminjaman  
-↓  
 Selesai
 
 ## Admin-user
@@ -44,9 +37,7 @@ Admin digunakan untuk mengelola data barang dan pengajuan peminjaman dari penggu
 - Menyetujui atau menolak peminjaman
 - Menambah data barang
 - Melihat data barang
-- Mengubah data barang
-- Menghapus data barang
-- Mengelola stok barang
+- CRUD data barang
 - Mengelola ukuran dan jenis barang
 
 ### Data Barang
@@ -61,20 +52,3 @@ Data yang dapat dikelola oleh admin meliputi:
 - Deskripsi
 - Foto barang
 - Status ketersediaan
-
-## Hak Akses
-
-| Fitur | End-user | Admin-user |
-|---|:---:|:---:|
-| Login | ✓ | ✓ |
-| Lihat barang | ✓ | ✓ |
-| Cari barang | ✓ | - |
-| Ajukan peminjaman | ✓ | - |
-| Pantau peminjaman | ✓ | ✓ |
-| Riwayat peminjaman | ✓ | - |
-| Approval peminjaman | - | ✓ |
-| Tambah barang | - | ✓ |
-| Edit barang | - | ✓ |
-| Hapus barang | - | ✓ |
-| Kelola stok | - | ✓ |
-| Kelola ukuran dan jenis | - | ✓ |
