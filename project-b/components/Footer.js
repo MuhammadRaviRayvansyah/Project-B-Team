@@ -1,16 +1,16 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Footer({
-  variant = 'app',
-  copyright = '© 2026 RentWear. All rights reserved.',
-  subtitle = 'Sistem Informasi Penyewaan Perlengkapan Acara',
+  variant = "app",
+  copyright = "© 2026 RentWear. All rights reserved.",
+  subtitle = "Sistem Informasi Penyewaan Perlengkapan Acara",
   links = [
-    { label: 'Panduan Layanan', href: '#' },
-    { label: 'Syarat & Ketentuan', href: '#' },
-    { label: 'Pusat Bantuan', href: '#' },
+    { label: "Panduan Layanan", href: "#" },
+    { label: "Syarat & Ketentuan", href: "#" },
+    { label: "Pusat Bantuan", href: "#" },
   ],
 }) {
-  if (variant === 'auth') {
+  if (variant === "auth") {
     return (
       <footer className="w-full max-w-6xl mx-auto py-3 text-center text-xs text-[#6C757D]">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">

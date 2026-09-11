@@ -1,9 +1,8 @@
-'use client';
-
-import { useState } from 'react';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,7 +10,7 @@ export default function RegisterPage() {
   const [agree, setAgree] = useState(false);
 
   const handleRegister = () => {
-    console.log('Daftar submit — backend belum terhubung');
+    console.log("Daftar submit — backend belum terhubung");
   };
 
   return (
@@ -77,7 +76,7 @@ export default function RegisterPage() {
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   required
@@ -104,7 +103,7 @@ export default function RegisterPage() {
               </label>
               <div className="relative">
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   id="confirmPassword"
                   name="confirmPassword"
                   required
@@ -135,9 +134,9 @@ export default function RegisterPage() {
                 className="mt-0.5 w-4 h-4 rounded border-[#CBD5E1] text-[#2F3A4A] focus:ring-[#2F3A4A] focus:ring-offset-0 cursor-pointer accent-[#2F3A4A]"
               />
               <span className="text-xs text-[#6C757D]">
-                Saya menyetujui{' '}
-                <Link href="#" className="font-semibold text-[#2F3A4A] hover:underline">Ketentuan Penggunaan</Link>{' '}
-                dan{' '}
+                Saya menyetujui{" "}
+                <Link href="#" className="font-semibold text-[#2F3A4A] hover:underline">Ketentuan Penggunaan</Link>{" "}
+                dan{" "}
                 <Link href="#" className="font-semibold text-[#2F3A4A] hover:underline">Kebijakan Peminjaman</Link>
               </span>
             </label>
@@ -152,7 +151,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="text-center pt-3 text-xs text-[#6C757D]">
-              Sudah memiliki akun?{' '}
+              Sudah memiliki akun?{" "}
               <Link href="/login" className="font-semibold text-[#2F3A4A] hover:underline ml-1">
                 Masuk
               </Link>
@@ -165,9 +164,9 @@ export default function RegisterPage() {
         variant="auth"
         copyright="© 2026 RentWear Services."
         links={[
-          { label: 'Ketentuan Penggunaan', href: '#' },
-          { label: 'Kebijakan Peminjaman', href: '#' },
-          { label: 'Bantuan', href: '#' },
+          { label: "Ketentuan Penggunaan", href: "#" },
+          { label: "Kebijakan Peminjaman", href: "#" },
+          { label: "Bantuan", href: "#" },
         ]}
       />
     </div>

@@ -1,4 +1,4 @@
-export default function Header({ subtitle = 'Sistem Informasi Penyewaan Perlengkapan Acara' }) {
+export default function Header({ subtitle = "Sistem Informasi Penyewaan Perlengkapan Acara" }) {
   return (
     <header className="w-full max-w-6xl mx-auto flex items-center justify-between py-2">
       <div className="flex items-center gap-2">

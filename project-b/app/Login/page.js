@@ -1,16 +1,15 @@
-'use client';
-
-import { useState } from 'react';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
   const handleLogin = () => {
-    console.log('Login submit — backend belum terhubung');
+    console.log("Login submit — backend belum terhubung");
   };
 
   return (
@@ -62,7 +61,7 @@ export default function LoginPage() {
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   required
@@ -109,8 +108,8 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center pt-3 text-xs text-[#6C757D]">
-              Belum memiliki akun?{' '}
-              <Link href="/Register" className="font-semibold text-[#2F3A4A] hover:underline ml-1">
+              Belum memiliki akun?{" "}
+              <Link href="/register" className="font-semibold text-[#2F3A4A] hover:underline ml-1">
                 Daftar
               </Link>
             </div>
@@ -129,9 +128,9 @@ export default function LoginPage() {
         variant="auth"
         copyright="© 2026 RentWear Services."
         links={[
-          { label: 'Ketentuan Penggunaan', href: '#' },
-          { label: 'Kebijakan Peminjaman', href: '#' },
-          { label: 'Bantuan', href: '#' },
+          { label: "Ketentuan Penggunaan", href: "#" },
+          { label: "Kebijakan Peminjaman", href: "#" },
+          { label: "Bantuan", href: "#" },
         ]}
       />
     </div>
