@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
+
 import Hero from "@/components/Hero";
-import Footer from "@/components/Footer";
 import CategoryCard from "@/components/CategoryCard";
 import ItemCard from "@/components/ItemCard";
 import { kategori, barang } from "@/app/data";
@@ -14,8 +13,6 @@ export default function BerandaPage() {
 
   return (
     <div className="bg-[#f7f9ff] text-[14px] leading-[20px] text-[#181c20] antialiased min-h-screen flex flex-col">
-      <Navbar />
-
       <main className="w-full max-w-[1200px] mx-auto px-[1rem] md:px-[2rem] pt-16 flex-1">
         <div className="flex flex-col w-full">
           <Hero />
@@ -90,8 +87,6 @@ export default function BerandaPage() {
           </section>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
