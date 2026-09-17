@@ -1,6 +1,8 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,151 +14,214 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between p-4 sm:p-6 lg:p-8 bg-[#F8F9FA] text-[#212529]">
-
-      <main className="flex-1 flex items-center justify-center py-6 sm:py-10">
-        <div className="w-full max-w-[430px] bg-white rounded-xl border border-[#E2E8F0] shadow-sm p-7 sm:p-9 transition-all">
-          <div className="text-center mb-7">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#F1F4F9] text-[#2F3A4A] mb-3.5 border border-[#E2E8F0]">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 4a2 2 0 0 1 2 2c0 1.05-.7 1.94-1.68 2.16L20 13a1 1 0 0 1-.5 1.87H4.5A1 1 0 0 1 4 13l7.68-4.84A2.002 2.002 0 0 1 12 4z" />
-                <line x1="4" y1="18" x2="20" y2="18" />
-              </svg>
-            </div>
-            <h1 className="text-xl font-bold text-[#212529] tracking-tight">RentWear</h1>
-            <p className="text-xs font-medium text-[#6C757D] mt-0.5">Sistem Peminjaman Barang</p>
-
-            <div className="mt-6 pt-5 border-t border-[#F1F4F9]">
-              <h2 className="text-lg font-semibold text-[#212529]">Buat Akun Baru</h2>
-              <p className="text-sm text-[#6C757D] mt-1">Daftar untuk mulai meminjam perlengkapan.</p>
-            </div>
-          </div>
-
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleRegister();
-            }}
-          >
-            <div>
-              <label htmlFor="fullname" className="block text-xs font-semibold text-[#212529] mb-1.5 uppercase tracking-wide">
-                Nama Lengkap
-              </label>
-              <input
-                type="text"
-                id="fullname"
-                name="fullname"
-                required
-                placeholder="Masukkan nama lengkap"
-                className="w-full px-3.5 py-2.5 bg-white border border-[#E2E8F0] rounded-lg text-sm text-[#212529] placeholder-[#9CA3AF] focus:outline-none focus:border-[#2F3A4A] focus:ring-1 focus:ring-[#2F3A4A] transition-colors duration-150"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-[#212529] mb-1.5 uppercase tracking-wide">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="nama@gmail.com"
-                className="w-full px-3.5 py-2.5 bg-white border border-[#E2E8F0] rounded-lg text-sm text-[#212529] placeholder-[#9CA3AF] focus:outline-none focus:border-[#2F3A4A] focus:ring-1 focus:ring-[#2F3A4A] transition-colors duration-150"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-[#212529] mb-1.5 uppercase tracking-wide">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  required
-                  placeholder="Buat password"
-                  className="w-full px-3.5 py-2.5 pr-10 bg-white border border-[#E2E8F0] rounded-lg text-sm text-[#212529] placeholder-[#9CA3AF] focus:outline-none focus:border-[#2F3A4A] focus:ring-1 focus:ring-[#2F3A4A] transition-colors duration-150"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#6C757D] hover:text-[#212529] focus:outline-none"
-                  aria-label="Lihat password"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-xs font-semibold text-[#212529] mb-1.5 uppercase tracking-wide">
-                Konfirmasi Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  required
-                  placeholder="Ulangi password"
-                  className="w-full px-3.5 py-2.5 pr-10 bg-white border border-[#E2E8F0] rounded-lg text-sm text-[#212529] placeholder-[#9CA3AF] focus:outline-none focus:border-[#2F3A4A] focus:ring-1 focus:ring-[#2F3A4A] transition-colors duration-150"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#6C757D] hover:text-[#212529] focus:outline-none"
-                  aria-label="Lihat konfirmasi password"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <label className="flex items-start gap-2 cursor-pointer select-none pt-1">
-              <input
-                type="checkbox"
-                id="agree"
-                checked={agree}
-                onChange={() => setAgree((prev) => !prev)}
-                required
-                className="mt-0.5 w-4 h-4 rounded border-[#CBD5E1] text-[#2F3A4A] focus:ring-[#2F3A4A] focus:ring-offset-0 cursor-pointer accent-[#2F3A4A]"
-              />
-              <span className="text-xs text-[#6C757D]">
-                Saya menyetujui{" "}
-                <Link href="#" className="font-semibold text-[#2F3A4A] hover:underline">Ketentuan Penggunaan</Link>{" "}
-                dan{" "}
-                <Link href="#" className="font-semibold text-[#2F3A4A] hover:underline">Kebijakan Peminjaman</Link>
-              </span>
-            </label>
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="w-full py-2.5 px-4 bg-[#2F3A4A] hover:bg-[#242D3A] active:bg-[#1E2530] text-white text-sm font-semibold rounded-lg transition-colors duration-150 flex items-center justify-center tracking-wider uppercase"
-              >
-                DAFTAR
-              </button>
-            </div>
-
-            <div className="text-center pt-3 text-xs text-[#6C757D]">
-              Sudah memiliki akun?{" "}
-              <Link href="/login" className="font-semibold text-[#2F3A4A] hover:underline ml-1">
-                Masuk
-              </Link>
-            </div>
-          </form>
+    <div className="w-full max-w-sm bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6">
+      {/* Header Form */}
+      <div className="text-center mb-3.5">
+        <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-slate-900 overflow-hidden mb-2 shadow-xs">
+          <Image
+            src="/logo.jpeg"
+            alt="RentWear Logo"
+            width={40}
+            height={40}
+            className="w-full h-full object-cover"
+          />
         </div>
-      </main>
+        <h1 className="text-base font-bold text-slate-900 tracking-tight">
+          RentWear
+        </h1>
+        <p className="text-[11px] font-medium text-slate-500">
+          Sistem Peminjaman Barang
+        </p>
 
+        <div className="mt-3 pt-2 border-t border-slate-100">
+          <h2 className="text-xs font-semibold text-slate-900">
+            Buat Akun Baru
+          </h2>
+          <p className="text-[11px] text-slate-500 mt-0.5">
+            Daftar untuk mulai meminjam perlengkapan.
+          </p>
+        </div>
+      </div>
+
+      {/* Form Input */}
+      <form
+        className="space-y-2.5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
+      >
+        {/* Nama Lengkap */}
+        <div>
+          <label
+            htmlFor="fullname"
+            className="block text-[10px] font-semibold text-slate-700 mb-1 uppercase tracking-wider"
+          >
+            Nama Lengkap
+          </label>
+          <input
+            type="text"
+            id="fullname"
+            name="fullname"
+            required
+            placeholder="Masukkan nama lengkap"
+            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-colors"
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-[10px] font-semibold text-slate-700 mb-1 uppercase tracking-wider"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="nama@gmail.com"
+            className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-colors"
+          />
+        </div>
+
+        {/* Password */}
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-[10px] font-semibold text-slate-700 mb-1 uppercase tracking-wider"
+          >
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              required
+              placeholder="Buat password"
+              className="w-full px-3 py-1.5 pr-8 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-colors"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-700 focus:outline-none"
+              aria-label="Lihat password"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Konfirmasi Password */}
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-[10px] font-semibold text-slate-700 mb-1 uppercase tracking-wider"
+          >
+            Konfirmasi Password
+          </label>
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              placeholder="Ulangi password"
+              className="w-full px-3 py-1.5 pr-8 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-colors"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-700 focus:outline-none"
+              aria-label="Lihat konfirmasi password"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Checkbox Syarat & Ketentuan */}
+        <label className="flex items-start gap-1.5 cursor-pointer select-none pt-0.5">
+          <input
+            type="checkbox"
+            id="agree"
+            checked={agree}
+            onChange={() => setAgree((prev) => !prev)}
+            required
+            className="mt-0.5 w-3.5 h-3.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 focus:ring-offset-0 cursor-pointer accent-slate-900"
+          />
+          <span className="text-[11px] text-slate-500 leading-tight">
+            Saya menyetujui{" "}
+            <Link href="#" className="font-semibold text-slate-900 hover:underline">
+              Ketentuan
+            </Link>{" "}
+            dan{" "}
+            <Link href="#" className="font-semibold text-slate-900 hover:underline">
+              Kebijakan
+            </Link>
+          </span>
+        </label>
+
+        {/* Tombol Submit */}
+        <div className="pt-1">
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center tracking-wider uppercase shadow-xs"
+          >
+            DAFTAR
+          </button>
+        </div>
+
+        {/* Link Ke Halaman Login */}
+        <div className="text-center pt-1 text-[11px] text-slate-500">
+          Sudah memiliki akun?{" "}
+          <Link
+            href="/login"
+            className="font-semibold text-slate-900 hover:underline ml-0.5"
+          >
+            Masuk
+          </Link>
+        </div>
+      </form>
     </div>
   );
 }
