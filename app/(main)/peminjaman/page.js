@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Hero from "@/components/Hero";
-import Image from "@/components/image";
+import Image from "next/image";
 // Data Dummy Peminjaman
 const DATA_PEMINJAMAN = [
   {
@@ -140,9 +140,9 @@ export default function PeminjamanSayaPage() {
                     Ketentuan Pengambilan & Pengembalian
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed mt-0.5">
-                    Tunjukkan Kartu Tanda Mahasiswa (KTM) asli dan bukti persetujuan
-                    digital di Loket Sarpras Gedung Rektorat Lt. 1 saat jadwal
-                    pengambilan.
+                    Tunjukkan Kartu Tanda Mahasiswa (KTM) asli dan bukti
+                    persetujuan digital di Loket Sarpras Gedung Rektorat Lt. 1
+                    saat jadwal pengambilan.
                   </p>
                 </div>
               </div>
@@ -173,7 +173,11 @@ function ItemPeminjamanCard({ item }) {
       case "Menunggu Persetujuan":
         return { bg: "bg-amber-900", text: "text-white", dot: "bg-amber-400" };
       case "Disetujui":
-        return { bg: "bg-emerald-900", text: "text-white", dot: "bg-emerald-400" };
+        return {
+          bg: "bg-emerald-900",
+          text: "text-white",
+          dot: "bg-emerald-400",
+        };
       case "Ditolak":
         return { bg: "bg-rose-900", text: "text-white", dot: "bg-rose-400" };
       default:
@@ -191,6 +195,8 @@ function ItemPeminjamanCard({ item }) {
           <Image
             src={item.img}
             alt={item.nama}
+            width={80}
+            height={80}
             className="w-full h-full object-cover"
           />
         </div>
@@ -220,7 +226,9 @@ function ItemPeminjamanCard({ item }) {
                 calendar_today
               </span>
               {item.tglAwalLabel}{" "}
-              <strong className="text-slate-800 font-semibold">{item.tglAwal}</strong>
+              <strong className="text-slate-800 font-semibold">
+                {item.tglAwal}
+              </strong>
             </span>
 
             {item.tglAkhir && (
@@ -229,7 +237,9 @@ function ItemPeminjamanCard({ item }) {
                   event
                 </span>
                 {item.tglAkhirLabel}{" "}
-                <strong className="text-slate-800 font-semibold">{item.tglAkhir}</strong>
+                <strong className="text-slate-800 font-semibold">
+                  {item.tglAkhir}
+                </strong>
               </span>
             )}
 
