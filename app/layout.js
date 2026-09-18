@@ -1,3 +1,4 @@
+import { UserProvider } from "@/components/UserContexts";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
@@ -11,7 +12,9 @@ export default function RootLayout({ children }) {
       </head>
 
       <body className="antialiased">
-        {children}
+        <UserProvider>
+          {children}
+        </UserProvider>
       </body>
     </html>
   );

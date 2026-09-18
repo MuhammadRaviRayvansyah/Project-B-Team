@@ -4,10 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import ProfileSidebar from "@/components/ProfileSidebar";
+import EditProfile from "@/components/EditProfile";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const navLinks = [
     { name: "Beranda", path: "/" },
@@ -19,7 +23,7 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e0e3e8]">
       <div className="h-16 max-w-300 mx-auto px-4 md:px-8 flex items-center justify-between">
-        
+
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center overflow-hidden shrink-0">
             <Image
@@ -55,28 +59,31 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <div className="h-4 w-px bg-[#e0e3e8] mx-[0.25rem]" />
-            <Link
-              href="/login"
-              className="text-[14px] text-[#44474c] hover:text-[#ba1a1a] transition-colors py-2"
-            >
-              Logout
-            </Link>
           </nav>
-          <div className="w-8 h-8 rounded-full bg-[#192434] flex items-center justify-center shrink-0">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="w-8 h-8 rounded-full bg-[#192434] flex items-center justify-center shrink-0"
+            aria-label="Menu profil"
+          >
             <span className="material-symbols-outlined text-white text-[18px]">
               person
             </span>
-          </div>
+          </button>
         </div>
 
         <div className="flex md:hidden items-center gap-[1rem]">
-          <div className="w-8 h-8 rounded-full bg-[#192434] flex items-center justify-center shrink-0">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="w-8 h-8 rounded-full bg-[#192434] flex items-center justify-center shrink-0"
+            aria-label="Menu profil"
+          >
             <span className="material-symbols-outlined text-white text-[18px]">
               person
             </span>
-          </div>
-          <button 
+          </button>
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="text-[#181c20] flex items-center justify-center"
           >
@@ -104,16 +111,18 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <div className="h-px w-full bg-[#e0e3e8] my-[0.25rem]" />
-          <Link
-            href="/login"
-            onClick={() => setIsMenuOpen(false)}
-            className="p-[0.75rem] text-[14px] text-[#44474c] hover:text-[#ba1a1a]"
-          >
-            Logout
-          </Link>
         </div>
       )}
+
+      <ProfileSidebar
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onEditProfile={() => {
+          setEditOpen(true);
+          setSidebarOpen(false);
+        }}
+      />
+      {editOpen && <EditProfile onClose={() => setEditOpen(false)} />}
     </header>
   );
 }
