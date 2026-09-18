@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -17,11 +18,17 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e0e3e8]">
-      <div className="h-16 max-w-[1200px] mx-auto px-[1rem] md:px-[2rem] flex items-center justify-between">
+      <div className="h-16 max-w-300 mx-auto px-4 md:px-8 flex items-center justify-between">
         
-        <div className="flex items-center gap-[0.75rem]">
-          <div className="w-8 h-8 rounded-lg bg-[#2f3a4a] flex items-center justify-center text-white text-[16px] font-semibold">
-            R
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center overflow-hidden shrink-0">
+            <Image
+              src="/logo.jpeg"
+              alt="RentWear Logo"
+              width={32}
+              height={32}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="hidden sm:flex flex-col">
             <span className="text-[16px] leading-[24px] font-semibold text-[#181c20] tracking-tight">
@@ -51,7 +58,7 @@ export default function Navbar() {
             <div className="h-4 w-px bg-[#e0e3e8] mx-[0.25rem]" />
             <Link
               href="/login"
-              className="text-[14px] text-[#44474c] hover:text-[#ba1a1a] transition-colors py-[0.5rem]"
+              className="text-[14px] text-[#44474c] hover:text-[#ba1a1a] transition-colors py-2"
             >
               Logout
             </Link>
