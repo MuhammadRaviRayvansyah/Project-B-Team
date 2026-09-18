@@ -1,97 +1,49 @@
+import Image from "next/image";
 import Link from "next/link";
 
-export default function ItemCard({
-  id,
-  nama,
-  kategori,
-  ukuran,
-  stok,
-  hargaPerHari,
-  img,
-}) {
-  const tersedia = Number(stok) > 0;
-
+export default function ItemCard({ id_barang, nama_barang, nama_kategori, ukuran, stok, harga_sewa, gambar }) {
   return (
-    <div className="bg-white rounded-lg shadow-sm flex flex-col overflow-hidden transition-shadow hover:shadow-md">
-      <div className="relative w-full aspect-[4/3] bg-[#ebeef3] overflow-hidden">
-        <img
-          className="w-full h-full object-cover"
-          src={img}
-          alt={nama}
+    <div className="bg-white rounded-2xl border border-slate-200/60 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all">
+      <div className="w-full h-48 bg-slate-100 rounded-xl overflow-hidden relative">
+        <Image
+          src={gambar}
+          alt={nama_barang}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          className="object-cover"
         />
-        <div className="absolute top-[0.5rem] right-[0.5rem]">
-          <span className="bg-white/95 text-[#181c20] px-[0.5rem] py-[0.25rem] rounded text-[11px] leading-[14px] tracking-[0.02em] font-semibold flex items-center gap-1 shadow-sm">
-            <span
-              className={
-                tersedia
-                  ? "w-2 h-2 rounded-full bg-[#16A34A]"
-                  : "w-2 h-2 rounded-full bg-[#DC2626]"
-              }
-            />
-            {tersedia ? "Tersedia" : "Tidak Tersedia"}
+        <div className="absolute top-3 right-3">
+          <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-md shadow-sm ${
+            stok > 0 ? "bg-emerald-900 text-white" : "bg-slate-800 text-white"
+          }`}>
+            {stok > 0 ? "Tersedia" : "Habis"}
           </span>
         </div>
       </div>
-      <div className="p-[1rem] flex flex-col flex-1 justify-between">
-        <div>
-          <div className="flex items-start justify-between gap-[0.5rem] mb-[0.25rem]">
-            <div>
-              <h3 className="text-[16px] leading-[24px] font-semibold text-[#181c20]">
-                {nama}
-              </h3>
-              <span className="inline-block mt-1 text-[12px] leading-[16px] text-[#575f67]">
-                {kategori}
-              </span>
-            </div>
-            <span className="shrink-0 text-[15px] leading-[22px] font-semibold text-[#2f3a4a]">
-              Rp{hargaPerHari.toLocaleString("id-ID")}
-              <span className="text-[11px] font-medium text-[#575f67]">
-                /hari
-              </span>
-            </span>
-          </div>
-          <div className="flex items-center gap-[1rem] py-[0.5rem] text-[#575f67] text-[13px] leading-[18px] tracking-[0.01em] mb-[0.75rem]">
-            <div className="flex items-center gap-[0.25rem]">
-              <span className="text-[12px] leading-[16px] font-medium text-[#181c20]">
-                Ukuran:
-              </span>
-              <span>{ukuran}</span>
-            </div>
-            <span className="text-[#d7dadf]">•</span>
-            <div className="flex items-center gap-[0.25rem]">
-              <span className="text-[12px] leading-[16px] font-medium text-[#181c20]">
-                Stok:
-              </span>
-              <span>{stok}</span>
-            </div>
-          </div>
+
+      <div className="flex flex-col flex-1">
+        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
+          {nama_kategori}
+        </span>
+        
+        <h3 className="text-sm font-bold text-slate-900 leading-snug line-clamp-1 mb-2">
+          {nama_barang}
+        </h3>
+        
+        <div className="flex items-center gap-3 text-xs text-slate-500 mb-4">
+          <span>Ukuran: <strong>{ukuran}</strong></span>
+          <span>•</span>
+          <span>Stok: <strong>{stok} unit</strong></span>
         </div>
-        <div className="pt-[0.5rem]">
-          {tersedia ? (
-            <Link href={`/barang/${id}`} className="block w-full">
-              <button
-                type="button"
-                className="w-full bg-[#2f3a4a] text-white hover:opacity-90 text-[14px] font-medium py-[0.5rem] rounded-lg transition-colors flex items-center justify-center gap-[0.5rem] h-10"
-              >
-                <span>Lihat Detail</span>
-                <span className="material-symbols-outlined text-[18px]">
-                  arrow_forward
-                </span>
-              </button>
-            </Link>
-          ) : (
-            <button
-              type="button"
-              disabled
-              className="w-full bg-[#e0e3e8] text-[#9aa0a6] cursor-not-allowed text-[14px] font-medium py-[0.5rem] rounded-lg flex items-center justify-center gap-[0.5rem] h-10"
-            >
-              <span>Lihat Detail</span>
-              <span className="material-symbols-outlined text-[18px]">
-                arrow_forward
-              </span>
-            </button>
-          )}
-        </div>
+
+        {/* Tombol mengarah dinamis ke halaman detail ID barang */}
+        <Link 
+          href={`/detail-barang/${id_barang}`}
+          className="w-full mt-auto bg-[#1f293d] text-white hover:bg-slate-800 text-xs font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1 shadow-sm"
+        >
+          <span>Lihat Detail</span>
+          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+        </Link>
       </div>
     </div>
   );

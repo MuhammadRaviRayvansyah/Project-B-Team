@@ -1,16 +1,19 @@
-import Link from "next/link";
-
-export default function CategoryCard({ icon, nama, jumlah }) {
+export default function CategoryCard({ icon, nama_kategori, jumlah_koleksi }) {
   return (
-    <Link
-      href="#"
-      className="bg-white p-[0.75rem] md:p-[1rem] rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center group"
-    >
-      <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px] rounded-lg bg-[#ebeef3] flex items-center justify-center text-[#181c20] mb-[0.5rem] md:mb-[0.75rem] group-hover:bg-[#2f3a4a] group-hover:text-white transition-colors">
-        <span className="material-symbols-outlined text-[20px] md:text-[24px]">{icon}</span>
+    <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 w-full h-full">
+      <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+        <span className="material-symbols-outlined text-slate-700 text-2xl">
+          {icon}
+        </span>
       </div>
-      <span className="text-[13px] md:text-[15px] leading-[18px] md:leading-[22px] font-semibold text-[#181c20]">{nama}</span>
-      <span className="text-[10px] md:text-[11px] leading-[14px] tracking-[0.02em] font-medium text-[#575f67] mt-[0.25rem]">{jumlah}</span>
-    </Link>
+      <div>
+        <h3 className="text-sm font-bold text-slate-900 mb-0.5">
+          {nama_kategori}
+        </h3>
+        <p className="text-xs font-medium text-slate-500">
+          {jumlah_koleksi} Koleksi
+        </p>
+      </div>
+    </div>
   );
 }
