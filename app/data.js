@@ -34,3 +34,4 @@ export const peminjaman = [
 export const review = [
   { id_review: 1, id_user: 1, id_barang: 1, rating: 5, komentar: "Jasnya sangat pas dan wangi.", tanggal_review: "2026-10-26" },
 ];
+
