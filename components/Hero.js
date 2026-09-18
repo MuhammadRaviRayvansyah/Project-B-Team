@@ -14,8 +14,8 @@ export default function Hero() {
         <span className="text-[11px] leading-[14px] tracking-[0.02em] font-semibold uppercase tracking-wider text-[#575f67] mb-[0.5rem] block">
           Sistem Informasi Penyewaan Perlengkapan Acara
         </span>
-        <h1 className="text-[32px] leading-[40px] tracking-[-0.02em] font-bold text-[#181c20] mb-[0.5rem]">Selamat Datang</h1>
-        <p className="text-[16px] leading-[24px] text-[#44474c] mb-[1.5rem]">
+        <h1 className="text-[28px] sm:text-[32px] leading-[36px] sm:leading-[40px] tracking-[-0.02em] font-bold text-[#181c20] mb-[0.5rem]">Selamat Datang</h1>
+        <p className="text-[14px] sm:text-[16px] leading-[22px] sm:leading-[24px] text-[#44474c] mb-[1.5rem]">
           Temukan barang untuk kebutuhan acara Anda.
         </p>
         <form
@@ -38,7 +38,7 @@ export default function Hero() {
           <button
             type="button"
             onClick={handleSearch}
-            className="bg-[#2f3a4a] text-white hover:opacity-90 text-[14px] font-medium px-[1.5rem] py-[0.5rem] rounded-lg transition-colors flex items-center justify-center gap-[0.5rem] h-10"
+            className="w-full sm:w-auto bg-[#2f3a4a] text-white hover:opacity-90 text-[14px] font-medium px-[1.5rem] py-[0.5rem] rounded-lg transition-colors flex items-center justify-center gap-[0.5rem] h-10"
           >
             <span>Cari</span>
           </button>

@@ -16,7 +16,7 @@ export default function Footer({
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
           <span>{copyright}</span>
           <span className="hidden sm:inline text-[#CBD5E1]">•</span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap justify-center items-center gap-4">
             {links.map((link) => (
               <Link key={link.label} href={link.href} className="hover:text-[#212529] hover:underline">
                 {link.label}
@@ -36,7 +36,7 @@ export default function Footer({
           <span className="hidden sm:inline text-[#44474c] text-[13px]">•</span>
           <span className="text-[13px] leading-[18px] tracking-[0.01em] text-[#44474c]">{subtitle}</span>
         </div>
-        <div className="flex items-center gap-[1.5rem]">
+        <div className="flex flex-wrap justify-center items-center gap-[1.5rem]">
           {links.map((link) => (
             <Link
               key={link.label}

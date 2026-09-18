@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from 'react';
 
-// Data Dummy Peminjaman
 const DATA_PEMINJAMAN = [
   {
     id: "RNT-2025-0891",
@@ -55,7 +54,6 @@ const DATA_PEMINJAMAN = [
 export default function PeminjamanSayaPage() {
   const [activeTab, setActiveTab] = useState("Semua");
 
-  // Opsi Tab Filter
   const tabs = [
     { label: "Semua", count: 4 },
     { label: "Menunggu", count: 1 },
@@ -64,7 +62,6 @@ export default function PeminjamanSayaPage() {
     { label: "Ditolak", count: 1 },
   ];
 
-  // Logika Filter Data
   const filteredData = DATA_PEMINJAMAN.filter((item) => {
     if (activeTab === "Semua") return true;
     if (activeTab === "Menunggu") return item.status === "Menunggu Persetujuan";
@@ -73,37 +70,35 @@ export default function PeminjamanSayaPage() {
 
   return (
     <div className="pt-20 w-full bg-[#f8fafc] min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="max-w-5xl mx-auto space-y-6 lg:space-y-8">
         
-        {/* Header Section */}
         <div>
-          <span className="text-[11px] font-bold tracking-wider text-gray-500 uppercase">
+          <span className="text-[11px] md:text-xs font-bold tracking-wider text-gray-500 uppercase">
             PEMANTAUAN PEMINJAMAN
           </span>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#181c20] mt-0.5">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#181c20] mt-0.5 md:mt-2">
             Peminjaman Saya
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 mt-1 md:mt-2">
             Pantau status permohonan peminjaman busana dan perlengkapan aktif Anda.
           </p>
         </div>
 
-        {/* Tab Filter Button */}
-        <div className="flex flex-wrap items-center gap-2 pt-1 overflow-x-auto">
+        <div className="flex flex-nowrap md:flex-wrap items-center gap-2 pt-1 overflow-x-auto pb-2 md:pb-0">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.label;
             return (
               <button
                 key={tab.label}
                 onClick={() => setActiveTab(tab.label)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                className={`whitespace-nowrap px-3.5 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center gap-1.5 ${
                   isActive
                     ? "bg-[#1e293b] text-white shadow-sm"
                     : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                 }`}
               >
                 <span>{tab.label}</span>
-                <span className={`text-[10px] ${isActive ? "text-gray-300" : "text-gray-400"}`}>
+                <span className={`text-[10px] md:text-xs ${isActive ? "text-gray-300" : "text-gray-400"}`}>
                   ({tab.count})
                 </span>
               </button>
@@ -111,34 +106,32 @@ export default function PeminjamanSayaPage() {
           })}
         </div>
 
-        {/* List Card Peminjaman */}
-        <div className="space-y-3">
+        <div className="space-y-3 md:space-y-4">
           {filteredData.map((item) => (
             <ItemPeminjamanCard key={item.id} item={item} />
           ))}
         </div>
 
-        {/* Footer Info Box */}
-        <div className="bg-[#f1f5f9]/70 rounded-xl p-4 border border-gray-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-start gap-3">
-            <span className="material-symbols-outlined text-gray-700 text-xl shrink-0 mt-0.5">
+        <div className="bg-[#f1f5f9]/70 rounded-xl p-4 md:p-6 border border-gray-200/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6">
+          <div className="flex items-start gap-3 md:gap-4">
+            <span className="material-symbols-outlined text-gray-700 text-xl md:text-2xl shrink-0 mt-0.5">
               verified
             </span>
             <div>
-              <h4 className="text-xs font-bold text-[#181c20]">
+              <h4 className="text-xs md:text-sm font-bold text-[#181c20]">
                 Ketentuan Pengambilan & Pengembalian
               </h4>
-              <p className="text-[11px] text-gray-500 leading-relaxed mt-0.5">
+              <p className="text-[11px] md:text-xs text-gray-500 leading-relaxed mt-0.5 md:mt-1">
                 Tunjukkan Kartu Tanda Mahasiswa (KTM) asli dan bukti persetujuan digital di Loket Sarpras Gedung Rektorat Lt. 1 saat jadwal pengambilan.
               </p>
             </div>
           </div>
           <a
             href="#"
-            className="text-xs font-semibold text-gray-800 hover:text-black flex items-center gap-1 shrink-0 self-end sm:self-center"
+            className="text-xs md:text-sm font-semibold text-gray-800 hover:text-black flex items-center gap-1 shrink-0 self-end md:self-center"
           >
             Baca SOP Selengkapnya
-            <span className="material-symbols-outlined text-sm">open_in_new</span>
+            <span className="material-symbols-outlined text-sm md:text-base">open_in_new</span>
           </a>
         </div>
 
@@ -147,9 +140,7 @@ export default function PeminjamanSayaPage() {
   );
 }
 
-// Sub-Component: Item Card Individual
 function ItemPeminjamanCard({ item }) {
-  // Config Badge Status
   const getStatusBadge = (status) => {
     switch (status) {
       case "Sedang Dipinjam":
@@ -168,10 +159,9 @@ function ItemPeminjamanCard({ item }) {
   const badgeStyle = getStatusBadge(item.status);
 
   return (
-    <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div className="flex items-center gap-4 w-full sm:w-auto">
-        {/* Gambar Barang */}
-        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#f1f5f9] rounded-lg overflow-hidden shrink-0">
+    <div className="bg-white rounded-xl p-4 md:p-5 lg:p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 md:gap-6 hover:shadow-md transition-shadow">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full lg:w-auto">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#f1f5f9] rounded-lg overflow-hidden shrink-0">
           <img
             src={item.img}
             alt={item.nama}
@@ -179,39 +169,38 @@ function ItemPeminjamanCard({ item }) {
           />
         </div>
 
-        {/* Informasi Detail */}
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-[11px] text-gray-500">
+        <div className="space-y-1.5 md:space-y-2">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] md:text-xs text-gray-500">
             <span className="font-semibold text-gray-700">ID: {item.id}</span>
-            <span>•</span>
+            <span className="hidden sm:inline">•</span>
             <span>Kategori: {item.kategori}</span>
           </div>
 
-          <h3 className="text-sm sm:text-base font-bold text-[#181c20]">
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-[#181c20]">
             {item.nama}
           </h3>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-gray-600">
+          <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-x-4 gap-y-2 text-[11px] md:text-xs text-gray-600">
             <span className="flex items-center gap-1 font-medium">
-              <span className="material-symbols-outlined text-sm">shopping_bag</span>
+              <span className="material-symbols-outlined text-sm md:text-base">shopping_bag</span>
               {item.unitInfo}
             </span>
 
             <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">calendar_today</span>
+              <span className="material-symbols-outlined text-sm md:text-base">calendar_today</span>
               {item.tglAwalLabel} <strong className="text-gray-800">{item.tglAwal}</strong>
             </span>
 
             {item.tglAkhir && (
               <span className="flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">event</span>
+                <span className="material-symbols-outlined text-sm md:text-base">event</span>
                 {item.tglAkhirLabel} <strong className="text-gray-800">{item.tglAkhir}</strong>
               </span>
             )}
 
             {item.catatan && (
-              <span className="flex items-center gap-1 text-rose-600">
-                <span className="material-symbols-outlined text-sm">info</span>
+              <span className="flex items-center gap-1 text-rose-600 w-full sm:w-auto">
+                <span className="material-symbols-outlined text-sm md:text-base">info</span>
                 {item.catatan}
               </span>
             )}
@@ -219,32 +208,29 @@ function ItemPeminjamanCard({ item }) {
         </div>
       </div>
 
-      {/* Bagian Kanan: Status & Tombol Detail */}
-      <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-0 border-gray-100 gap-3">
-        <div className="text-right hidden sm:block">
-          <span className="text-[10px] font-semibold text-gray-400 block mb-1">
+      <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto pt-3 lg:pt-0 border-t lg:border-0 border-gray-100 gap-3">
+        <div className="text-right hidden lg:block">
+          <span className="text-[10px] md:text-xs font-semibold text-gray-400 block mb-1.5">
             Status Pengajuan
           </span>
-          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold ${badgeStyle.bg} ${badgeStyle.text}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${badgeStyle.dot}`} />
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold ${badgeStyle.bg} ${badgeStyle.text}`}>
+            <span className={`w-2 h-2 rounded-full ${badgeStyle.dot}`} />
             {item.status}
           </span>
         </div>
 
-        {/* Badge Tampilan Mobile */}
-        <span className={`sm:hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-semibold ${badgeStyle.bg} ${badgeStyle.text}`}>
+        <span className={`lg:hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] md:text-xs font-semibold ${badgeStyle.bg} ${badgeStyle.text}`}>
           <span className={`w-1.5 h-1.5 rounded-full ${badgeStyle.dot}`} />
           {item.status}
         </span>
 
-        {/* Tombol Lihat Detail */}
         <button
           type="button"
           onClick={() => alert(`Detail peminjaman: ${item.id}`)}
-          className="text-xs font-semibold text-gray-700 hover:text-black flex items-center gap-1 transition-colors"
+          className="text-xs md:text-sm font-semibold text-gray-700 hover:text-black flex items-center gap-1 transition-colors"
         >
           Lihat Detail
-          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          <span className="material-symbols-outlined text-sm md:text-base">arrow_forward</span>
         </button>
       </div>
     </div>

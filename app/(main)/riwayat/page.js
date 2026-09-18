@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from 'react';
 
-// Data Dummy Riwayat
 const INITIAL_HISTORY = [
   {
     id: "#RW-2025-0891",
@@ -41,12 +40,10 @@ export default function RiwayatSayaPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("Semua");
 
-  // Kalkulasi Statistik Ringkasan
   const totalRiwayat = INITIAL_HISTORY.length;
   const dikembalikanCount = INITIAL_HISTORY.filter(i => i.status === "Dikembalikan").length;
   const ditolakCount = INITIAL_HISTORY.filter(i => i.status === "Ditolak").length;
 
-  // Logika Filter Data
   const filteredData = INITIAL_HISTORY.filter((item) => {
     const matchSearch = item.barang.toLowerCase().includes(searchQuery.toLowerCase()) || 
                         item.id.toLowerCase().includes(searchQuery.toLowerCase());
@@ -58,8 +55,7 @@ export default function RiwayatSayaPage() {
     <div className="pt-20 w-full bg-[#f8fafc] min-h-screen py-8 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-6">
         
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <span className="text-[11px] font-bold tracking-wider text-gray-400 uppercase">
               RIWAYAT PEMINJAMAN
@@ -75,16 +71,14 @@ export default function RiwayatSayaPage() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="self-start sm:self-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm flex items-center gap-2 transition-all"
+            className="w-full md:w-auto px-4 py-2.5 md:py-2 bg-white border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm flex items-center justify-center gap-2 transition-all"
           >
             <span className="material-symbols-outlined text-base">print</span>
             Cetak Rekap
           </button>
         </div>
 
-        {/* Summary Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Total Riwayat */}
           <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 font-medium">Total Riwayat</p>
@@ -95,7 +89,6 @@ export default function RiwayatSayaPage() {
             </div>
           </div>
 
-          {/* Selesai / Dikembalikan */}
           <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 font-medium">Selesai / Dikembalikan</p>
@@ -106,7 +99,6 @@ export default function RiwayatSayaPage() {
             </div>
           </div>
 
-          {/* Ditolak / Dibatalkan */}
           <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 font-medium">Ditolak / Dibatalkan</p>
@@ -118,10 +110,8 @@ export default function RiwayatSayaPage() {
           </div>
         </div>
 
-        {/* Filter & Search Bar */}
-        <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
-          {/* Search Input */}
-          <div className="relative w-full sm:max-w-md">
+        <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-3">
+          <div className="relative w-full lg:max-w-md">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
               search
             </span>
@@ -130,17 +120,16 @@ export default function RiwayatSayaPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari riwayat peminjaman..."
-              className="w-full bg-[#f1f5f9]/70 text-xs text-gray-800 placeholder-gray-400 pl-9 pr-4 py-2 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#2f3a4a]"
+              className="w-full bg-[#f1f5f9]/70 text-xs text-gray-800 placeholder-gray-400 pl-9 pr-4 py-2.5 rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-[#2f3a4a]"
             />
           </div>
 
-          {/* Tab Filter */}
-          <div className="flex items-center gap-1 bg-[#f1f5f9]/70 p-1 rounded-lg w-full sm:w-auto">
+          <div className="flex items-center gap-1 bg-[#f1f5f9]/70 p-1 rounded-lg w-full lg:w-auto overflow-x-auto">
             {["Semua", "Dikembalikan", "Ditolak"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 sm:flex-none px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                className={`flex-1 lg:flex-none whitespace-nowrap px-4 py-2 rounded-md text-xs font-semibold transition-all ${
                   activeTab === tab
                     ? "bg-[#1e293b] text-white shadow-sm"
                     : "text-gray-600 hover:text-black"
@@ -152,10 +141,9 @@ export default function RiwayatSayaPage() {
           </div>
         </div>
 
-        {/* Tabel Data Riwayat */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-[#f1f5f9]/50 text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">
                   <th className="py-3 px-4">Barang</th>
@@ -169,7 +157,6 @@ export default function RiwayatSayaPage() {
                 {filteredData.length > 0 ? (
                   filteredData.map((row, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                      {/* Barang */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <img
@@ -183,18 +170,12 @@ export default function RiwayatSayaPage() {
                           </div>
                         </div>
                       </td>
-
-                      {/* Tanggal Pinjam */}
                       <td className="py-3 px-4 text-gray-600 font-medium">
                         {row.tglPinjam}
                       </td>
-
-                      {/* Tanggal Kembali */}
                       <td className="py-3 px-4 text-gray-600 font-medium">
                         {row.tglKembali}
                       </td>
-
-                      {/* Status */}
                       <td className="py-3 px-4 text-center">
                         <span
                           className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${
@@ -209,8 +190,6 @@ export default function RiwayatSayaPage() {
                           {row.status}
                         </span>
                       </td>
-
-                      {/* Aksi */}
                       <td className="py-3 px-4 text-right">
                         <button
                           type="button"
@@ -232,32 +211,30 @@ export default function RiwayatSayaPage() {
               </tbody>
             </table>
           </div>
-
-          {/* Footer Table & Pagination */}
-          <div className="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+          
+          <div className="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
             <p>
               Menampilkan {filteredData.length} dari {totalRiwayat} arsip peminjaman
             </p>
             <div className="flex items-center gap-1">
-              <button disabled className="px-2 py-1 text-gray-300 cursor-not-allowed">
+              <button disabled className="px-3 py-1.5 rounded-md text-gray-400 bg-gray-50 cursor-not-allowed">
                 Sebelumnya
               </button>
-              <button className="w-7 h-7 rounded-md bg-[#1e293b] text-white font-semibold flex items-center justify-center">
+              <button className="w-8 h-8 rounded-md bg-[#1e293b] text-white font-semibold flex items-center justify-center">
                 1
               </button>
-              <button disabled className="px-2 py-1 text-gray-300 cursor-not-allowed">
+              <button disabled className="px-3 py-1.5 rounded-md text-gray-400 bg-gray-50 cursor-not-allowed">
                 Selanjutnya
               </button>
             </div>
           </div>
         </div>
 
-        {/* Info Box Bottom */}
         <div className="bg-[#f1f5f9]/70 rounded-xl p-4 border border-gray-200/60 flex items-start gap-3">
           <span className="material-symbols-outlined text-gray-500 text-lg shrink-0 mt-0.5">
             info
           </span>
-          <p className="text-[11px] text-gray-600 leading-relaxed">
+          <p className="text-[11px] md:text-xs text-gray-600 leading-relaxed">
             <strong className="text-gray-800">Informasi Penyimpanan Data:</strong> Riwayat transaksi peminjaman sarana dan prasarana kampus disimpan selama masa studi aktif mahasiswa. Bukti pengembalian resmi dapat diunduh melalui rincian tiap transaksi.
           </p>
         </div>

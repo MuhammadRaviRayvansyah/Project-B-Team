@@ -12,7 +12,6 @@ export default function ItemFilter({
 }) {
   return (
     <div className="w-full bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-3">
-      {/* Input Pencarian */}
       <div className="relative flex-1 w-full">
         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#575f67] text-[20px]">
           search
@@ -26,7 +25,6 @@ export default function ItemFilter({
         />
       </div>
 
-      {/* Filter Kategori */}
       <div className="w-full md:w-auto min-w-[200px]">
         <select
           value={selectedCategory}
@@ -41,7 +39,6 @@ export default function ItemFilter({
         </select>
       </div>
 
-      {/* Filter Ukuran */}
       <div className="w-full md:w-auto min-w-[180px]">
         <select
           value={selectedSize}

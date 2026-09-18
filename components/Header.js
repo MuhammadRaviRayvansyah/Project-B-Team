@@ -1,6 +1,6 @@
 export default function Header({}) {
   return (
-    <header className="w-full max-w-6xl mx-auto flex items-center justify-between py-2">
+    <header className="w-full max-w-6xl mx-auto flex items-center justify-between py-2 px-4">
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 rounded-lg bg-[#2F3A4A] flex items-center justify-center text-white">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
