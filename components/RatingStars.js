@@ -1,6 +1,5 @@
 export default function RatingStars({ rating = 0, size = 16 }) {
   const bintang = [1, 2, 3, 4, 5];
-
   return (
     <div className="flex items-center gap-[1px]">
       {bintang.map((b) => {

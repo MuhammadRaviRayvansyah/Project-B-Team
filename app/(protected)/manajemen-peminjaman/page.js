@@ -1,286 +1,63 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
+import { getPeminjaman, getBarang } from "@/lib/api";
+import { updateStatusPeminjamanAction, deletePeminjamanAction } from "@/app/actions/peminjaman";
 import Hero from "@/components/Hero";
-import { DATA_PEMINJAMAN_ADMIN } from "../_data";
-import StatusBadge from "../components/StatusBadge";
 
-export default function ManajemenPeminjamanPage() {
-  const [data, setData] = useState(DATA_PEMINJAMAN_ADMIN);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("Semua");
+export default async function ManajemenPeminjamanPage() {
+  const [pemRes, barRes] = await Promise.all([getPeminjaman(), getBarang()]);
+  const peminjamanList = Array.isArray(pemRes) ? pemRes : pemRes.data || [];
+  const barangList = Array.isArray(barRes) ? barRes : barRes.data || [];
 
-  const tabs = [
-    "Semua",
-    "Menunggu Persetujuan",
-    "Disetujui",
-    "Sedang Dipinjam",
-    "Dikembalikan",
-    "Ditolak",
-  ];
-
-  const filteredData = data.filter((item) => {
-    const matchTab = activeTab === "Semua" || item.status === activeTab;
-    const q = searchQuery.toLowerCase();
-    const matchSearch =
-      item.nama.toLowerCase().includes(q) ||
-      item.peminjam.toLowerCase().includes(q) ||
-      item.id.toLowerCase().includes(q) ||
-      item.nim.toLowerCase().includes(q);
-    return matchTab && matchSearch;
+  const formattedData = peminjamanList.map((item) => {
+    const brg = barangList.find((b) => (b.id_barang || b.id) === (item.id_barang || item.barang_id)) || {};
+    return { ...item, nama_barang: brg.nama_barang || brg.nama, img: brg.gambar || brg.img, ukuran: brg.ukuran };
   });
 
-  // Ubah status salah satu peminjaman
-  const updateStatus = (id, newStatus, catatan) => {
-    setData((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, status: newStatus, catatan: catatan ?? item.catatan }
-          : item
-      )
-    );
-  };
-
-  const handleSetujui = (item) => {
-    updateStatus(item.id, "Disetujui");
-  };
-
-  const handleTolak = (item) => {
-    const alasan = window.prompt(
-      `Alasan menolak pengajuan "${item.nama}" (opsional):`,
-      ""
-    );
-    if (alasan === null) return; // batal
-    updateStatus(item.id, "Ditolak", alasan || "Ditolak oleh admin");
-  };
-
-  const handleTandaiDikembalikan = (item) => {
-    updateStatus(item.id, "Dikembalikan");
-  };
-
-  const handleDetail = (item) => {
-    window.alert(
-      `Detail Peminjaman\n\nID: ${item.id}\nPeminjam: ${item.peminjam} (${item.nim})\nBarang: ${item.nama}\nPeriode: ${item.tglPinjam} - ${item.tglKembali}\nStatus: ${item.status}${
-        item.catatan ? `\nCatatan: ${item.catatan}` : ""
-      }`
-    );
-  };
-
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header halaman */}
-      <Hero
-        category="ADMIN • PEMINJAMAN"
-        title="Manajemen Peminjaman"
-        description="Tinjau, setujui, atau tolak pengajuan peminjaman barang dari seluruh pengguna."
-      />
-
-      {/* Search */}
-      <div className="w-full bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-        <div className="relative w-full">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#575f67] text-[20px]">
-            search
-          </span>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari nama peminjam, NIM, ID, atau nama barang..."
-            className="w-full bg-[#f1f5f9] text-[#181c20] placeholder-[#575f67] pl-10 pr-4 py-2.5 rounded-lg text-[14px] leading-relaxed border-none focus:outline-none focus:ring-2 focus:ring-[#2f3a4a] transition-all"
-          />
-        </div>
-      </div>
-
-      {/* Tab Filter */}
-      <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
-        {tabs.map((tab) => {
-          const isActive = activeTab === tab;
-          const count =
-            tab === "Semua"
-              ? data.length
-              : data.filter((d) => d.status === tab).length;
-          return (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 shrink-0 ${
-                isActive
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              <span>{tab}</span>
-              <span className={isActive ? "text-slate-300" : "text-slate-400"}>
-                ({count})
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Tabel - tampilan desktop */}
-      <section className="hidden lg:block bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-slate-50 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
-              <th className="px-5 py-3">Barang</th>
-              <th className="px-5 py-3">Peminjam</th>
-              <th className="px-5 py-3">Periode</th>
-              <th className="px-5 py-3">Status</th>
-              <th className="px-5 py-3 text-right">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {filteredData.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50/60">
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <img
-                      src={item.img}
-                      alt={item.nama}
-                      className="w-11 h-11 rounded-lg object-cover shrink-0 border border-slate-100"
-                    />
-                    <div className="min-w-0">
-                      <p className="font-semibold text-slate-900 truncate max-w-[220px]">
-                        {item.nama}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        ID: {item.id} • {item.unitInfo}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-3.5">
-                  <p className="font-medium text-slate-800">{item.peminjam}</p>
-                  <p className="text-xs text-slate-500">{item.nim}</p>
-                </td>
-                <td className="px-5 py-3.5 text-xs text-slate-600">
-                  <p>Pinjam: {item.tglPinjam}</p>
-                  <p>Kembali: {item.tglKembali}</p>
-                </td>
-                <td className="px-5 py-3.5">
-                  <StatusBadge status={item.status} />
-                </td>
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center justify-end gap-2">
-                    {item.status === "Menunggu Persetujuan" && (
-                      <>
-                        <button
-                          onClick={() => handleSetujui(item)}
-                          className="text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg px-3 py-1.5 transition-colors"
-                        >
-                          Setujui
-                        </button>
-                        <button
-                          onClick={() => handleTolak(item)}
-                          className="text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg px-3 py-1.5 transition-colors"
-                        >
-                          Tolak
-                        </button>
-                      </>
-                    )}
-
-                    {item.status === "Sedang Dipinjam" && (
-                      <button
-                        onClick={() => handleTandaiDikembalikan(item)}
-                        className="text-xs font-semibold text-slate-700 border border-slate-200 hover:bg-slate-50 rounded-lg px-3 py-1.5 transition-colors"
-                      >
-                        Tandai Kembali
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => handleDetail(item)}
-                      className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1.5 transition-colors"
-                    >
-                      Detail
-                    </button>
-                  </div>
-                </td>
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <Hero category="ADMIN • PEMINJAMAN" title="Manajemen Peminjaman" description="Kelola seluruh transaksi peminjaman." />
+      <section className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden w-full">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse min-w-[950px]">
+            <thead>
+              <tr className="bg-slate-50 text-xs sm:text-sm font-semibold text-slate-500 uppercase border-b">
+                <th className="py-4 px-4 sm:px-6">Peminjam</th><th className="py-4 px-4 sm:px-6">Barang</th>
+                <th className="py-4 px-4 sm:px-6">Durasi & Biaya</th><th className="py-4 px-4 sm:px-6">Status</th>
+                <th className="py-4 px-4 sm:px-6 text-right">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {filteredData.length === 0 && (
-          <div className="text-center py-12 text-slate-500 font-medium">
-            Tidak ada peminjaman yang sesuai dengan filter.
-          </div>
-        )}
-      </section>
-
-      {/* Kartu - tampilan mobile/tablet */}
-      <section className="lg:hidden space-y-3">
-        {filteredData.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-xl p-4 border border-slate-200/60 shadow-sm flex flex-col gap-3"
-          >
-            <div className="flex items-center gap-3">
-              <img
-                src={item.img}
-                alt={item.nama}
-                className="w-14 h-14 rounded-lg object-cover shrink-0 border border-slate-100"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold text-slate-900 text-sm truncate">
-                  {item.nama}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {item.peminjam} • {item.nim}
-                </p>
-                <p className="text-xs text-slate-400">ID: {item.id}</p>
-              </div>
-              <StatusBadge status={item.status} />
-            </div>
-
-            <div className="text-xs text-slate-600 flex items-center gap-4 border-t border-slate-100 pt-3">
-              <span>Pinjam: {item.tglPinjam}</span>
-              <span>Kembali: {item.tglKembali}</span>
-            </div>
-
-            <div className="flex items-center gap-2 pt-1">
-              {item.status === "Menunggu Persetujuan" && (
-                <>
-                  <button
-                    onClick={() => handleSetujui(item)}
-                    className="flex-1 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg px-3 py-2 transition-colors"
-                  >
-                    Setujui
-                  </button>
-                  <button
-                    onClick={() => handleTolak(item)}
-                    className="flex-1 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg px-3 py-2 transition-colors"
-                  >
-                    Tolak
-                  </button>
-                </>
-              )}
-
-              {item.status === "Sedang Dipinjam" && (
-                <button
-                  onClick={() => handleTandaiDikembalikan(item)}
-                  className="flex-1 text-xs font-semibold text-slate-700 border border-slate-200 hover:bg-slate-50 rounded-lg px-3 py-2 transition-colors"
-                >
-                  Tandai Kembali
-                </button>
-              )}
-
-              <button
-                onClick={() => handleDetail(item)}
-                className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-2 transition-colors"
-              >
-                Detail
-              </button>
-            </div>
-          </div>
-        ))}
-
-        {filteredData.length === 0 && (
-          <div className="text-center py-12 text-slate-500 font-medium bg-white rounded-xl border border-slate-100 shadow-sm">
-            Tidak ada peminjaman yang sesuai dengan filter.
-          </div>
-        )}
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+              {formattedData.map((item) => (
+                <tr key={item.id_peminjaman || item.id} className="hover:bg-slate-50/80">
+                  <td className="py-3 px-4 sm:px-6">
+                    <p className="font-semibold">{item.nama_peminjam || `User #${item.id_user}`}</p>
+                  </td>
+                  <td className="py-3 px-4 sm:px-6">
+                    <div className="flex items-center gap-3">
+                      <img src={item.img || "/placeholder.png"} alt="img" className="w-10 h-10 rounded-lg object-cover" />
+                      <div><p className="font-semibold">{item.nama_barang}</p><p className="text-[10px]">Uk: {item.ukuran} | {item.jumlah} Unit</p></div>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4 sm:px-6"><p>{item.tanggal_peminjaman} s/d {item.tanggal_pengembalian}</p><p className="font-bold text-emerald-600">Rp {item.total_harga}</p></td>
+                  <td className="py-3 px-4 sm:px-6"><span className="px-2 py-1 rounded bg-slate-100">{item.status}</span></td>
+                  <td className="py-3 px-4 sm:px-6 text-right">
+                    <div className="flex items-center justify-end gap-1.5 flex-nowrap">
+                      {item.status === 'Menunggu Persetujuan' && (
+                        <><form action={updateStatusPeminjamanAction.bind(null, item.id_peminjaman || item.id, 'Disetujui', '')}><button type="submit" className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg font-bold text-xs">Setujui</button></form>
+                        <form action={updateStatusPeminjamanAction.bind(null, item.id_peminjaman || item.id, 'Ditolak', '')}><button type="submit" className="bg-rose-50 text-rose-700 px-3 py-2 rounded-lg font-bold text-xs">Tolak</button></form></>
+                      )}
+                      {item.status === 'Disetujui' && (
+                        <form action={updateStatusPeminjamanAction.bind(null, item.id_peminjaman || item.id, 'Dikembalikan', '')}><button type="submit" className="bg-emerald-50 text-emerald-700 px-3 py-2 rounded-lg font-bold text-xs">Selesai</button></form>
+                      )}
+                      <Link href={`/manajemen-peminjaman/edit/${item.id_peminjaman || item.id}`} className="bg-amber-50 text-amber-700 px-3 py-2 rounded-lg font-bold text-xs">Edit</Link>
+                      <form action={deletePeminjamanAction.bind(null, item.id_peminjaman || item.id)}><button type="submit" className="bg-slate-50 text-slate-500 px-3 py-2 rounded-lg font-bold text-xs">Hapus</button></form>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
