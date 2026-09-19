@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 
 // Menu yang sudah jadi (bisa diklik)
 const menuAktif = [
-  { label: "Dashboard", href: "/admin", icon: "dashboard" },
+  { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
   {
     label: "Manajemen Peminjaman",
-    href: "/admin/manajemen-peminjaman",
+    href: "/manajemen-peminjaman",
     icon: "assignment_turned_in",
   },
 ];
@@ -47,16 +47,6 @@ export default function Sidebar({ onNavigate }) {
         </div>
       </div>
 
-      {onNavigate && (
-        <button
-          type="button"
-          onClick={onNavigate}
-          className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"
-        >
-          <span className="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      )}
-
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
         <p className="px-2.5 mb-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
@@ -64,10 +54,7 @@ export default function Sidebar({ onNavigate }) {
         </p>
 
         {menuAktif.map((item) => {
-          const isActive =
-            item.href === "/admin"
-              ? pathname === "/admin"
-              : pathname.startsWith(item.href);
+          const isActive = pathname.startsWith(item.href);
 
           return (
             <Link
@@ -126,7 +113,9 @@ export default function Sidebar({ onNavigate }) {
           href="/login"
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-rose-600 hover:bg-rose-50 transition-all"
         >
-          <span className="material-symbols-outlined text-[20px]">logout</span>
+          <span className="material-symbols-outlined text-[20px]">
+            logout
+          </span>
           Logout
         </Link>
       </div>

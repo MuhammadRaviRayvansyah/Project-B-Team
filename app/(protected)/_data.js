@@ -1,0 +1,90 @@
+// Data dummy khusus area Admin.
+// Nantinya array ini tinggal diganti dengan hasil fetch dari API/database.
+
+export const DATA_PEMINJAMAN_ADMIN = [
+  {
+    id: "RNT-2025-0891",
+    peminjam: "Aditya Rahman",
+    nim: "2210512001",
+    kategori: "Busana Formal",
+    nama: "Jas Formal Pria Midnight Navy",
+    unitInfo: "1 Unit (Size L)",
+    tglPinjam: "20 Okt 2025",
+    tglKembali: "25 Okt 2025",
+    status: "Sedang Dipinjam",
+    img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=200&auto=format&fit=crop",
+  },
+  {
+    id: "RNT-2025-0902",
+    peminjam: "Siti Nur Aini",
+    nim: "2210512045",
+    kategori: "Busana Tradisional",
+    nama: "Kebaya Modern Kartini Cream",
+    unitInfo: "1 Unit (Size M)",
+    tglPinjam: "24 Okt 2025",
+    tglKembali: "28 Okt 2025",
+    status: "Menunggu Persetujuan",
+    img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=200&auto=format&fit=crop",
+  },
+  {
+    id: "RNT-2025-0844",
+    peminjam: "Bagus Wicaksono",
+    nim: "2210512012",
+    kategori: "Alas Kaki & Aksesori",
+    nama: "Sepatu Pantofel Oxford Leather",
+    unitInfo: "1 Pasang (Ukuran 42)",
+    tglPinjam: "22 Okt 2025",
+    tglKembali: "26 Okt 2025",
+    status: "Disetujui",
+    img: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=200&auto=format&fit=crop",
+  },
+  {
+    id: "RNT-2025-0789",
+    peminjam: "Farah Amelia",
+    nim: "2210512078",
+    kategori: "Perlengkapan Acara",
+    nama: "Kamera DSLR Sony Alpha A7 III Kit",
+    unitInfo: "1 Paket Lengkap",
+    tglPinjam: "15 Okt 2025",
+    tglKembali: "18 Okt 2025",
+    catatan: "Jadwal bentrok dengan kegiatan fakultas",
+    status: "Ditolak",
+    img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=200&auto=format&fit=crop",
+  },
+  {
+    id: "RNT-2025-0733",
+    peminjam: "Muhammad Rizki",
+    nim: "2210512090",
+    kategori: "Busana Tradisional",
+    nama: "Toga Wisuda Lengkap",
+    unitInfo: "1 Set (Size L)",
+    tglPinjam: "10 Okt 2025",
+    tglKembali: "14 Okt 2025",
+    status: "Dikembalikan",
+    img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=200&auto=format&fit=crop",
+  },
+  {
+    id: "RNT-2025-0955",
+    peminjam: "Nadia Putri",
+    nim: "2210512033",
+    kategori: "Busana Tradisional",
+    nama: "Kebaya Janggan",
+    unitInfo: "1 Unit (Size L)",
+    tglPinjam: "27 Okt 2025",
+    tglKembali: "30 Okt 2025",
+    status: "Menunggu Persetujuan",
+    img: "https://i.pinimg.com/1200x/c1/9b/f8/c19bf8f0454c548da3fb6a6ff9ce3f06.jpg",
+  },
+];
+
+// Ringkasan cepat untuk kartu statistik di Dashboard
+export function getRingkasanPeminjaman(data = DATA_PEMINJAMAN_ADMIN) {
+  return {
+    total: data.length,
+    menunggu: data.filter((d) => d.status === "Menunggu Persetujuan").length,
+    dipinjam: data.filter((d) => d.status === "Sedang Dipinjam").length,
+    disetujui: data.filter((d) => d.status === "Disetujui").length,
+    selesai: data.filter((d) => d.status === "Dikembalikan").length,
+    ditolak: data.filter((d) => d.status === "Ditolak").length,
+  };
+}

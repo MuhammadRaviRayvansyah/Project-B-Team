@@ -2,27 +2,8 @@
 
 import { useState } from "react";
 import Hero from "@/components/Hero";
-import { peminjaman, users, barang } from "@/app/data";
+import { DATA_PEMINJAMAN_ADMIN } from "../_data";
 import StatusBadge from "../components/StatusBadge";
-
-const DATA_PEMINJAMAN_ADMIN = peminjaman.map((p) => {
-  const u = users.find((user) => user.id_user === p.id_user);
-  const b = barang.find((item) => item.id_barang === p.id_barang);
-
-  return {
-    id: `PMJ-${p.id_peminjaman.toString().padStart(3, "0")}`,
-    rawId: p.id_peminjaman,
-    nama: b ? b.nama_barang : "Barang Tidak Ditemukan",
-    img: b ? b.gambar : "/file.svg",
-    unitInfo: b ? `Ukuran: ${b.ukuran}` : "-",
-    peminjam: u ? u.nama : "Anonim",
-    nim: u ? u.email.split("@")[0] : "-",
-    tglPinjam: p.tanggal_peminjaman,
-    tglKembali: p.tanggal_pengembalian,
-    status: p.status,
-    catatan: "",
-  };
-});
 
 export default function ManajemenPeminjamanPage() {
   const [data, setData] = useState(DATA_PEMINJAMAN_ADMIN);
@@ -55,8 +36,8 @@ export default function ManajemenPeminjamanPage() {
       prev.map((item) =>
         item.id === id
           ? { ...item, status: newStatus, catatan: catatan ?? item.catatan }
-          : item,
-      ),
+          : item
+      )
     );
   };
 
@@ -67,7 +48,7 @@ export default function ManajemenPeminjamanPage() {
   const handleTolak = (item) => {
     const alasan = window.prompt(
       `Alasan menolak pengajuan "${item.nama}" (opsional):`,
-      "",
+      ""
     );
     if (alasan === null) return; // batal
     updateStatus(item.id, "Ditolak", alasan || "Ditolak oleh admin");
@@ -81,7 +62,7 @@ export default function ManajemenPeminjamanPage() {
     window.alert(
       `Detail Peminjaman\n\nID: ${item.id}\nPeminjam: ${item.peminjam} (${item.nim})\nBarang: ${item.nama}\nPeriode: ${item.tglPinjam} - ${item.tglKembali}\nStatus: ${item.status}${
         item.catatan ? `\nCatatan: ${item.catatan}` : ""
-      }`,
+      }`
     );
   };
 

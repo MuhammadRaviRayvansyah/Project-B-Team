@@ -3,8 +3,17 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "./components/Sidebar";
+import Topbar from "./components/Topbar";
 
-export default function AdminLayout({ children }) {
+// Judul halaman otomatis berdasarkan path aktif
+function getTitleFromPath(pathname) {
+  if (pathname.startsWith("/dashboard")) return "Dashboard";
+  if (pathname.startsWith("/manajemen-peminjaman"))
+    return "Manajemen Peminjaman";
+  return "Admin";
+}
+
+export default function ProtectedLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
@@ -17,17 +26,25 @@ export default function AdminLayout({ children }) {
         </div>
       </div>
 
+      {/* Sidebar - versi mobile (overlay) */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div className="absolute inset-y-0 left-0">
+            <Sidebar onNavigate={() => setSidebarOpen(false)} />
+          </div>
+        </div>
+      )}
+
       {/* Konten Utama */}
       <div className="flex-1 flex flex-col min-h-screen md:pl-64">
-        <div className="md:hidden p-4 bg-white border-b border-slate-200 flex items-center">
-          <button
-            type="button"
-            onClick={() => setSidebarOpen(true)}
-            className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100"
-          >
-            <span className="material-symbols-outlined text-[22px]">menu</span>
-          </button>
-        </div>
+        <Topbar
+          title={getTitleFromPath(pathname)}
+          onOpenSidebar={() => setSidebarOpen(true)}
+        />
         <main className="flex-1 p-4 md:p-8 w-full max-w-7xl mx-auto">
           {children}
         </main>
