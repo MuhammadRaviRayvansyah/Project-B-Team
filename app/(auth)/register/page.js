@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { registerAction } from "@/app/actions/auth";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,10 +15,38 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
-    const result = await registerAction(formData);
+    const nama = formData.get("nama");
+    const email = formData.get("email");
+    const no_hp = formData.get("no_hp");
+    const password = formData.get("password");
 
-    if (result && result.error) {
-      setErrorMessage(result.error);
+    if (password.length < 6) {
+      setErrorMessage("Password minimal 6 karakter.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://hmif.if.unram.ac.id/api/v3"}/${process.env.NEXT_PUBLIC_PROJECT_ID || "pepac"}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-API-Key": process.env.NEXT_PUBLIC_API_KEY || "pk_pepac_95a8363fde15d4a6",
+        },
+        body: JSON.stringify({ nama, email, no_hp, password }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Registrasi gagal, silakan coba lagi.");
+      }
+
+      router.push("/login");
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -60,7 +89,7 @@ export default function RegisterPage() {
           <div>
             <label className="block text-xs font-semibold text-slate-600 mb-1">Nomor Handphone / WhatsApp</label>
             <input
-              type="text"
+              type="tel"
               name="no_hp"
               required
               placeholder="081234567890"
@@ -74,6 +103,7 @@ export default function RegisterPage() {
               type="password"
               name="password"
               required
+              minLength={6}
               placeholder="••••••••"
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400"
             />

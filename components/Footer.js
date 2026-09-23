@@ -10,7 +10,6 @@ export default function Footer({
     { label: "Pusat Bantuan", href: "#" },
   ],
 }) {
-  // Tampilan khusus Auth (Login/Register)
   if (variant === "auth") {
     return (
       <footer className="w-full max-w-5xl mx-auto py-2 text-center text-[11px] text-slate-500">
@@ -33,7 +32,6 @@ export default function Footer({
     );
   }
 
-  // Tampilan umum Aplikasi / Beranda
   return (
     <footer className="w-full bg-white border-t border-slate-200 mt-auto">
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">

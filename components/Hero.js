@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Hero({
   category = "KATALOG INVENTARIS",
   title = "Daftar Barang",
@@ -14,16 +12,13 @@ export default function Hero({
       <span className="block text-xs font-semibold text-slate-500 tracking-wider uppercase mb-1">
         {category}
       </span>
-
       <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
         {title}
       </h1>
-
       <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed mb-6">
         {description}
       </p>
 
-      {/* Kotak Pencarian Khusus di Hero Beranda */}
       {showSearch && (
         <form
           onSubmit={(e) => {

@@ -1,10 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getUserProfile, clearToken } from "@/lib/token";
+import { useUser } from "@/components/UserContexts";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { setUser } = useUser();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const user = getUserProfile();
 
   const navLinks = [
     { name: "Beranda", path: "/" },
@@ -13,6 +19,12 @@ export default function Navbar() {
     { name: "Riwayat", path: "/riwayat" },
     { name: "Review", path: "/review" },
   ];
+
+  const handleLogout = () => {
+    clearToken();
+    setUser(null);
+    window.location.href = "/login";
+  };
 
   return (
     <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -34,9 +46,7 @@ export default function Navbar() {
                 key={link.name}
                 href={link.path}
                 className={`text-sm font-medium transition-colors ${
-                  pathname === link.path
-                    ? "text-slate-900 font-bold"
-                    : "text-slate-600 hover:text-slate-900"
+                  pathname === link.path ? "text-slate-900 font-bold" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {link.name}
@@ -44,13 +54,60 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-colors">
-              <span className="material-symbols-outlined text-xl">person</span>
-            </Link>
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <button 
+                onClick={handleLogout}
+                className="px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-base">logout</span>
+                <span>Logout</span>
+              </button>
+            ) : (
+              <Link href="/login" className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium">
+                Masuk
+              </Link>
+            )}
           </div>
+            
+          <button 
+            className="md:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-lg"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <span className="material-symbols-outlined">{isMobileMenuOpen ? "close" : "menu"}</span>
+          </button>
         </div>
       </div>
+
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-slate-100 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.path}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                pathname === link.path ? "bg-slate-50 text-slate-900 font-bold" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+          {user ? (
+            <button 
+              onClick={handleLogout}
+              className="w-full px-3 py-2 mt-2 rounded-md bg-rose-50 text-rose-600 text-base font-medium text-center flex items-center justify-center gap-1.5"
+            >
+              <span className="material-symbols-outlined text-base">logout</span>
+              <span>Logout</span>
+            </button>
+          ) : (
+            <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 mt-2 rounded-md bg-slate-900 text-white text-base font-medium text-center">
+              Masuk
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

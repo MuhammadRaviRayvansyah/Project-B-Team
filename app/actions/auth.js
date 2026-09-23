@@ -26,8 +26,11 @@ export async function loginAction(formData) {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok || !data.success || !data.token) {
-      return { error: data.message || "Login gagal, periksa kembali email dan password." };
+      return { error: data.message || "Login gagal" };
     }
+
+    const role = data.user.role || (email.includes("admin") ? "admin" : "user");
+    const userData = { ...data.user, role };
 
     const cookieStore = await cookies();
     cookieStore.set("session_token", data.token, {
@@ -36,14 +39,12 @@ export async function loginAction(formData) {
       path: "/",
     });
 
-    if (data.user) {
-      cookieStore.set("user_profile", JSON.stringify(data.user), {
-        maxAge: 60 * 60 * 24 * 7,
-        path: "/",
-      });
-    }
+    cookieStore.set("user_profile", JSON.stringify(userData), {
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
   } catch (error) {
-    return { error: "Terjadi kesalahan koneksi ke server." };
+    return { error: "Terjadi kesalahan koneksi ke server" };
   }
 
   redirect("/");
@@ -70,25 +71,10 @@ export async function registerAction(formData) {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok || !data.success) {
-      return { error: data.message || "Registrasi gagal, silakan coba lagi." };
-    }
-
-    if (data.token) {
-      const cookieStore = await cookies();
-      cookieStore.set("session_token", data.token, {
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7,
-        path: "/",
-      });
-      if (data.user) {
-        cookieStore.set("user_profile", JSON.stringify(data.user), {
-          maxAge: 60 * 60 * 24 * 7,
-          path: "/",
-        });
-      }
+      return { error: data.message || "Registrasi gagal" };
     }
   } catch (error) {
-    return { error: "Terjadi kesalahan koneksi ke server." };
+    return { error: "Terjadi kesalahan koneksi ke server" };
   }
 
   redirect("/login");

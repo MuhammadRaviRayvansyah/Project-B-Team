@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, setIsOpen }) {
   const pathname = usePathname();
 
   const menuItems = [
@@ -14,32 +14,44 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col min-h-screen">
-      <div className="p-6 border-b border-slate-200">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-slate-900 text-3xl">checkroom</span>
-          <div>
-            <h1 className="text-lg font-bold text-slate-900 leading-tight">RentWear</h1>
-            <p className="text-[10px] text-slate-500 font-medium leading-none">Admin Panel</p>
-          </div>
-        </Link>
+    <aside
+      className={`fixed inset-y-0 left-0 z-[50] w-64 bg-white border-r border-slate-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto flex flex-col ${
+        isOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
+      }`}
+    >
+      <div className="flex items-center justify-between h-16 px-6 border-b border-slate-100 shrink-0">
+        <div className="flex items-center gap-2 text-[#1a2234]">
+          <span className="material-symbols-outlined text-2xl">checkroom</span>
+          <span className="text-xl font-black tracking-tight">RentWear</span>
+        </div>
+        {/* Tombol Tutup Sidebar (Hanya di Mobile) */}
+        <button
+          onClick={() => setIsOpen(false)}
+          className="lg:hidden text-slate-400 hover:text-rose-500 transition-colors p-1 rounded-md hover:bg-rose-50"
+        >
+          <span className="material-symbols-outlined text-[20px]">close</span>
+        </button>
       </div>
-      
-      <div className="flex-1 py-6 px-4 flex flex-col gap-2">
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            href={item.path}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-              pathname === item.path
-                ? "bg-slate-900 text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-            }`}
-          >
-            <span className="material-symbols-outlined">{item.icon}</span>
-            <span className="font-semibold text-sm">{item.name}</span>
-          </Link>
-        ))}
+
+      <div className="p-4 space-y-1.5 overflow-y-auto flex-1 scrollbar-hide">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path || pathname.startsWith(item.path + "/");
+          return (
+            <Link
+              key={item.name}
+              href={item.path}
+              onClick={() => setIsOpen(false)} // Otomatis menutup sidebar saat menu diklik (di mobile)
+              className={`flex items-center gap-3 px-4 py-3.5 rounded-xl font-bold text-sm transition-all ${
+                isActive
+                  ? "bg-[#1a2234] text-white shadow-md"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-[#1a2234]"
+              }`}
+            >
+              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+              {item.name}
+            </Link>
+          );
+        })}
       </div>
     </aside>
   );
