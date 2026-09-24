@@ -61,22 +61,22 @@ export default function RegisterPage() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative px-4 py-8"
       style={{ backgroundImage: "url('/images/bg-auth.jpg')" }}
     >
-      {/* Overlay terang transparan ber-blur (sama persis seperti login sebelumnya) */}
-      <div className="absolute inset-0" />
+      {/* Overlay gelap transparan ber-blur lembut */}
+      <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[2px]" />
 
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 w-full max-w-md bg-white/85 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl border border-white/60 transition-all duration-300"
+        className="relative z-10 w-full max-w-md bg-white/90 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl border border-white/60 transition-all duration-300"
       >
         {/* Header / Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl ">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl overflow-hidden shadow-sm mb-3">
             <Image
               src="/images/logo.jpeg" 
               alt="Logo Aplikasi"
               width={64}
               height={64}
-              className="object-contain w-full h-full"
+              className="object-cover w-full h-full"
             />
           </div>
           <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">
@@ -119,7 +119,7 @@ export default function RegisterPage() {
                 name="nama"
                 required
                 placeholder="Masukkan nama lengkap"
-                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all shadow-sm"
               />
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <svg
@@ -150,7 +150,7 @@ export default function RegisterPage() {
                 name="email"
                 required
                 placeholder="nama@email.com"
-                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all shadow-sm"
               />
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <svg
@@ -181,7 +181,7 @@ export default function RegisterPage() {
                 name="no_hp"
                 required
                 placeholder="081234567890"
-                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all shadow-sm"
               />
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <svg
@@ -213,7 +213,7 @@ export default function RegisterPage() {
                 required
                 minLength={6}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                className="w-full px-4 py-3 pl-11 bg-white/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all shadow-sm"
               />
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <svg
@@ -237,12 +237,12 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.99] disabled:opacity-60 text-white py-3.5 rounded-xl font-bold text-xs shadow-lg shadow-blue-500/25 transition-all duration-200 !mt-6 flex items-center justify-center gap-2"
+            className="w-full bg-amber-400 hover:bg-amber-500 active:scale-[0.99] disabled:opacity-60 text-slate-900 py-3.5 rounded-xl font-bold text-xs shadow-lg shadow-amber-400/25 transition-all duration-200 !mt-6 flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>
                 <svg
-                  className="animate-spin h-4 w-4 text-white"
+                  className="animate-spin h-4 w-4 text-slate-900"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -273,7 +273,7 @@ export default function RegisterPage() {
           Sudah punya akun?{" "}
           <Link
             href="/login"
-            className="font-bold text-blue-600 hover:text-indigo-600 hover:underline transition-colors"
+            className="font-bold text-amber-600 hover:text-amber-700 hover:underline transition-colors"
           >
             Masuk di sini
           </Link>

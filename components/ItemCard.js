@@ -1,45 +1,53 @@
 import Link from "next/link";
-import RatingStars from "@/components/RatingStars";
 
-export default function ItemCard({ id_barang, nama_barang, nama_kategori, ukuran, stok, harga_sewa, gambar, ulasan = [] }) {
-  const avgRating = ulasan.length ? ulasan.reduce((sum, r) => sum + r.rating, 0) / ulasan.length : 0;
-
+export default function ItemCard({
+  id_barang,
+  nama_barang,
+  nama_kategori,
+  ukuran,
+  stok,
+  harga_sewa,
+  gambar,
+}) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/60 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all h-full">
-      <div className="w-full h-48 bg-slate-100 rounded-xl overflow-hidden relative shrink-0">
-        <img 
-          src={gambar || "/placeholder.png"} 
-          alt={nama_barang || "Barang"} 
-          className="w-full h-full object-cover absolute inset-0"
-          onError={(e) => { e.target.src = "/placeholder.png"; }}
+    <Link 
+      href={`/barang/${id_barang}`}
+      className="group flex flex-col bg-transparent transition-all"
+    >
+      {/* Card Image */}
+      <div className="w-full aspect-[4/5] bg-slate-100 rounded-2xl overflow-hidden relative mb-3">
+        <img
+          src={gambar || "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=500"}
+          alt={nama_barang}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        <div className="absolute top-3 right-3">
-          <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-md shadow-sm ${stok > 0 ? "bg-emerald-900 text-white" : "bg-slate-800 text-white"}`}>
-            {stok > 0 ? "Tersedia" : "Habis"}
+        {stok > 0 ? (
+          <span className="absolute top-3 right-3 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-semibold text-slate-800 shadow-sm">
+            Tersedia: {stok}
           </span>
-        </div>
+        ) : (
+          <span className="absolute top-3 right-3 px-3 py-1 bg-rose-500/90 text-white rounded-full text-[10px] font-semibold shadow-sm">
+            Habis
+          </span>
+        )}
       </div>
-      <div className="flex flex-col flex-1">
-        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">{nama_kategori || "Umum"}</span>
-        <h3 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2 mb-1.5">{nama_barang}</h3>
-        <div className="flex items-center gap-1.5 mb-3">
-          <RatingStars rating={avgRating} size={14} />
-          <span className="text-[10px] text-slate-500 font-medium">{ulasan.length > 0 ? `${avgRating.toFixed(1)} (${ulasan.length} ulasan)` : "Belum dinilai"}</span>
+
+      {/* Info Details */}
+      <div className="px-1 space-y-1">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+            {nama_kategori} {ukuran ? `• ${ukuran}` : ""}
+          </span>
+          {harga_sewa && (
+            <span className="text-xs font-bold text-slate-900">
+              Rp {Number(harga_sewa).toLocaleString("id-ID")}
+            </span>
+          )}
         </div>
-        <div className="flex items-center gap-3 text-xs text-slate-500 mb-3">
-          <span>Ukuran: <strong className="text-slate-700">{ukuran || "-"}</strong></span>
-          <span className="text-slate-300">•</span>
-          <span>Stok: <strong className="text-slate-700">{stok || 0}</strong></span>
-        </div>
-        <div className="mb-4 mt-auto pt-3 border-t border-slate-100">
-          <p className="text-[10px] text-slate-400 font-semibold mb-0.5">Harga Sewa / Hari</p>
-          <p className="text-sm font-bold text-emerald-600">Rp {(harga_sewa || 0).toLocaleString("id-ID")}</p>
-        </div>
-        <Link href={`/detail-barang/${id_barang}`} className="w-full mt-auto bg-[#1f293d] text-white hover:bg-slate-800 text-xs font-semibold py-2.5 rounded-xl flex items-center justify-center gap-1 transition-colors">
-          <span>Lihat Detail</span>
-          <span className="material-symbols-outlined text-sm">arrow_forward</span>
-        </Link>
+        <h3 className="text-sm font-bold text-slate-900 group-hover:text-slate-600 transition-colors line-clamp-1">
+          {nama_barang}
+        </h3>
       </div>
-    </div>
+    </Link>
   );
 }

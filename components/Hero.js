@@ -1,50 +1,49 @@
+import Link from "next/link";
+
 export default function Hero({
-  category = "KATALOG INVENTARIS",
-  title = "Daftar Barang",
-  description = "Pilih perlengkapan resmi, busana seremonial, dan atribut kampus yang tersedia untuk dipinjam secara terpusat dan terverifikasi.",
-  showSearch = false,
-  searchQuery = "",
-  onSearchChange = () => {},
-  onSearchSubmit = () => {}
+  category = "PEMINJAMAN PAKAIAN ACARA",
+  title = "Pakaian Terbaik untuk Acara Spesial Anda",
+  description = "Sewa batik, jas, sepatu, dan perlengkapan acara kampus secara cepat, mudah, dan terintegrasi.",
 }) {
   return (
-    <div className="w-full bg-[#f1f4f9] sm:bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60">
-      <span className="block text-xs font-semibold text-slate-500 tracking-wider uppercase mb-1">
-        {category}
-      </span>
-      <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
-        {title}
-      </h1>
-      <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed mb-6">
-        {description}
-      </p>
+    <section className="bg-[#8eb0c7] rounded-[32px] p-8 sm:p-12 md:p-14 text-white overflow-hidden my-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* Text Content */}
+        <div className="lg:col-span-7 space-y-6">
+          <p className="text-xs tracking-wider uppercase font-medium text-white/80">
+            {category}
+          </p>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1]">
+            {title}
+          </h1>
+          <p className="text-sm sm:text-base text-white/90 max-w-lg leading-relaxed">
+            {description}
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/barang"
+              className="inline-flex items-center justify-center px-8 py-3.5 bg-white text-slate-900 hover:bg-slate-100 rounded-full text-xs font-semibold shadow-sm transition-all duration-200 active:scale-95"
+            >
+              Mulai Peminjaman
+            </Link>
+          </div>
+        </div>
 
-      {showSearch && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSearchSubmit();
-          }}
-          className="flex flex-col sm:flex-row gap-2 bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-sm max-w-xl"
-        >
-          <div className="flex-1 flex items-center px-3 gap-2">
-            <span className="material-symbols-outlined text-slate-400 text-xl">search</span>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Cari barang..."
-              className="w-full bg-transparent text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none py-2"
+        {/* Hero Image Block */}
+        <div className="lg:col-span-5 relative">
+          <div className="w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden shadow-lg bg-slate-200">
+            <img
+              src="/images/hero-banner.jpg" 
+              alt="Perlengkapan PEPAC"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=800";
+              }}
             />
           </div>
-          <button
-            type="submit"
-            className="bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors flex items-center justify-center"
-          >
-            Cari
-          </button>
-        </form>
-      )}
-    </div>
+        </div>
+      </div>
+    </section>
   );
 }
