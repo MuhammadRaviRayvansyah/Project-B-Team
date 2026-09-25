@@ -78,10 +78,10 @@ export default function Navbar() {
             {user ? (
               <button 
                 onClick={handleLogout}
-                className="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5"
+                className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-bold shadow-md transition-all active:scale-95 flex items-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-sm">logout</span>
-                <span>Logout</span>
+                <span>Keluar</span>
               </button>
             ) : (
               <Link 
@@ -128,10 +128,10 @@ export default function Navbar() {
             {user ? (
               <button 
                 onClick={handleLogout}
-                className="w-full px-4 py-2.5 rounded-full bg-rose-600 text-white text-xs font-semibold text-center flex items-center justify-center gap-1.5"
+                className="w-full px-4 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-bold text-center shadow-md flex items-center justify-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-sm">logout</span>
-                <span>Logout</span>
+                <span>Keluar</span>
               </button>
             ) : (
               <Link 

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ItemCard from "@/components/ItemCard";
 import { getKategori, getBarang } from "@/lib/api";
+import CaraPeminjaman from "@/components/beranda/cara-peminjaman";
+import KeunggulanPepac from "@/components/beranda/keunggulan-pepac";
 
 export default function BerandaPage() {
   const [kategoriList, setKategoriList] = useState([]);
@@ -220,6 +222,9 @@ export default function BerandaPage() {
           )}
         </section>
 
+          <CaraPeminjaman />
+          
+          <KeunggulanPepac />
       </main>
     </div>
   );
