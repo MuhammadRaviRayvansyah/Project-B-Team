@@ -24,23 +24,31 @@ export default function AuthGuard({ children }) {
     }
 
     const isAuthPage = pathname === "/login" || pathname === "/register";
-    const isBeranda = pathname === "/";
+    const isPublicPage =
+      pathname === "/" ||
+      pathname === "/barang" ||
+      pathname.startsWith("/detail-barang") ||
+      pathname === "/review";
     const isAdminPage = pathname.startsWith("/dashboard") || pathname.startsWith("/manajemen-");
+    const isUserOnlyPage = pathname === "/peminjaman" || pathname === "/riwayat";
 
     if (!token || !currentUser) {
-      if (!isBeranda && !isAuthPage) {
+      if (!isPublicPage && !isAuthPage) {
         router.replace("/login");
       } else {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsAuthorized(true);
       }
       return;
     }
 
-    const role = currentUser.role === "admin" ? "admin" : "user";
+    const role = String(currentUser.role || "").trim().toLowerCase() === "admin" ? "admin" : "user";
 
     if (role === "admin") {
       if (isAuthPage) {
         router.replace("/dashboard");
+      } else if (isUserOnlyPage) {
+        router.replace("/manajemen-peminjaman");
       } else {
         setIsAuthorized(true);
       }

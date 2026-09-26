@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ProfileSidebar from "@/components/ProfileSidebar";
+import Image from "next/image";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const pathname = usePathname();
@@ -9,8 +11,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: "dashboard" },
     { name: "Manajemen Barang", path: "/manajemen-barang", icon: "inventory_2" },
-    { name: "Rating / Review", path: "/manajemen-review", icon: "star" },
     { name: "Manajemen Peminjaman", path: "/manajemen-peminjaman", icon: "assignment" },
+    { name: "Rating / Review", path: "/manajemen-review", icon: "star" },
   ];
 
   return (
@@ -21,8 +23,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     >
       <div className="flex items-center justify-between h-16 px-6 border-b border-slate-100 shrink-0">
         <div className="flex items-center gap-2 text-[#1a2234]">
-          <span className="material-symbols-outlined text-2xl">checkroom</span>
-          <span className="text-xl font-black tracking-tight">RentWear</span>
+          <Image
+            src="/images/logo.jpeg"
+            alt="Logo PEPAC"
+            width={40}
+            height={40}
+            className="w-full h-full object-cover"
+          />
+          <span className="text-xl font-black tracking-tight">PEPAC</span>
         </div>
         {/* Tombol Tutup Sidebar (Hanya di Mobile) */}
         <button
@@ -52,6 +60,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             </Link>
           );
         })}
+      </div>
+
+      <div className="shrink-0 border-t border-slate-100">
+        <ProfileSidebar />
       </div>
     </aside>
   );

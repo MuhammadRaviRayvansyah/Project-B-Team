@@ -119,12 +119,10 @@ export default function DetailBarangPage() {
     let userId = findUserId(currentUser) || findUserId(tokenData);
 
     if (!userId) {
-      const fallbackId = window.prompt("Sistem gagal mendeteksi ID dari server. Masukkan ID User Anda secara manual (contoh: 1 atau 2):");
-      if (!fallbackId || isNaN(fallbackId)) {
-        setErrorMsg("ID User wajib diisi berupa angka untuk melakukan peminjaman.");
-        return;
-      }
-      userId = fallbackId;
+      setErrorMsg(
+        "Sesi Anda tidak ditemukan. Silakan logout dan login kembali untuk melakukan peminjaman."
+      );
+      return;
     }
 
     setIsSubmitting(true);
@@ -136,13 +134,13 @@ export default function DetailBarangPage() {
       tanggal_pengembalian: tanggalKembali,
       jumlah: Number(jumlah),
       harga_sewa: Number(barang.harga_sewa || 0),
-      status: "pending",
+      status: "Menunggu Persetujuan",
       total_harga: Number(totalHarga)
     };
 
     try {
       await api.post("/peminjaman", payload);
-      router.push("/riwayat");
+      router.push("/peminjaman");
     } catch (error) {
       setErrorMsg(error.message || "Gagal mengajukan peminjaman.");
       setIsSubmitting(false);

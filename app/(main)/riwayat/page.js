@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getPeminjaman, getBarang } from "@/lib/api";
+import { useUser } from "@/components/UserContexts";
+import { getUserProfile } from "@/lib/token";
 import Header from "@/components/share-main/header";
 
 const formatDate = (dateString) => {
@@ -21,6 +23,10 @@ const formatDate = (dateString) => {
 };
 
 export default function RiwayatSayaPage() {
+  const { user } = useUser();
+  const activeUser = user || getUserProfile();
+  const currentUserId = activeUser?.id_user || activeUser?.id;
+
   const [historyData, setHistoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -37,10 +43,8 @@ export default function RiwayatSayaPage() {
         const rawBarang = Array.isArray(barRes) ? barRes : [];
 
         const barangMap = {};
-
         rawBarang.forEach((b) => {
           const id = b.id_barang || b.id;
-
           if (id) {
             barangMap[id] = {
               nama_barang: b.nama_barang || b.nama,
@@ -49,19 +53,29 @@ export default function RiwayatSayaPage() {
           }
         });
 
-        const completed = rawPeminjaman
-          .filter((p) => p.status === "Dikembalikan" || p.status === "Ditolak")
+        // Filter KHUSUS transaksi milik user yang sedang login
+        const userPeminjaman = currentUserId
+          ? rawPeminjaman.filter(
+              (p) => Number(p.id_user || p.user_id) === Number(currentUserId),
+            )
+          : [];
+
+        const completedStatuses = ["dikembalikan", "ditolak", "selesai", "dibatalkan"];
+
+        const completed = userPeminjaman
+          .filter((p) =>
+            completedStatuses.includes(String(p.status || "").trim().toLowerCase()),
+          )
           .map((p) => {
             const bId = p.id_barang || p.barang_id;
-
             const detailBarang = barangMap[bId] || {
-              nama_barang: "Barang Tidak Ditemukan",
+              nama_barang: p.nama_barang || "Barang Tidak Ditemukan",
               gambar: "",
             };
 
             return {
               ...p,
-              nama_barang: detailBarang.nama_barang,
+              nama_barang: p.nama_barang || detailBarang.nama_barang,
               gambar: detailBarang.gambar,
             };
           });
@@ -76,7 +90,7 @@ export default function RiwayatSayaPage() {
     };
 
     fetchData();
-  }, []);
+  }, [currentUserId]);
 
   return (
     <div className="min-h-screen bg-white text-slate-900 pb-20">
@@ -150,17 +164,25 @@ export default function RiwayatSayaPage() {
                 </h3>
 
                 <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
-                  Belum terdapat transaksi peminjaman yang selesai atau ditolak.
+                  Belum terdapat transaksi peminjaman yang selesai dikembalikan atau ditolak.
                 </p>
+
+                <a
+                  href="/barang"
+                  className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[16px]">checkroom</span>
+                  Lihat Katalog Pakaian
+                </a>
               </div>
             ) : (
               /* Data */
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[720px]">
+                <table className="w-full text-left border-collapse min-w-[760px]">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200">
                       <th className="py-4 px-5 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
-                        Barang
+                        Barang & Unit
                       </th>
 
                       <th className="py-4 px-5 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
@@ -169,6 +191,10 @@ export default function RiwayatSayaPage() {
 
                       <th className="py-4 px-5 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
                         Tanggal Kembali
+                      </th>
+
+                      <th className="py-4 px-5 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                        Total Biaya
                       </th>
 
                       <th className="py-4 px-5 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider text-center">
@@ -180,8 +206,9 @@ export default function RiwayatSayaPage() {
                   <tbody className="divide-y divide-slate-100">
                     {historyData.map((row) => {
                       const rowId = row.id_peminjaman || row.id;
-
-                      const isReturned = row.status === "Dikembalikan";
+                      const stLower = String(row.status || "").trim().toLowerCase();
+                      const isReturned = stLower === "dikembalikan" || stLower === "selesai";
+                      const displayStatus = isReturned ? "Dikembalikan" : "Ditolak";
 
                       return (
                         <tr
@@ -192,15 +219,18 @@ export default function RiwayatSayaPage() {
                           <td className="py-4 px-5">
                             <div className="flex items-center gap-3">
                               {row.gambar ? (
-                                <div className="w-11 h-11 rounded-xl overflow-hidden bg-slate-100 shrink-0">
+                                <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/60">
                                   <img
                                     src={row.gambar}
                                     alt={row.nama_barang}
                                     className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.src = "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=500";
+                                    }}
                                   />
                                 </div>
                               ) : (
-                                <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200/60">
                                   <span className="material-symbols-outlined text-xl text-slate-400">
                                     inventory_2
                                   </span>
@@ -213,7 +243,7 @@ export default function RiwayatSayaPage() {
                                 </p>
 
                                 <p className="text-[11px] text-slate-400 mt-0.5">
-                                  ID #{rowId}
+                                  Jumlah: {row.jumlah || 1} Unit
                                 </p>
                               </div>
                             </div>
@@ -233,13 +263,20 @@ export default function RiwayatSayaPage() {
                             </p>
                           </td>
 
+                          {/* Total Biaya */}
+                          <td className="py-4 px-5">
+                            <p className="text-sm font-bold text-slate-900">
+                              Rp {Number(row.total_harga || (Number(row.harga_sewa || 0) * Number(row.jumlah || 1))).toLocaleString("id-ID")}
+                            </p>
+                          </td>
+
                           {/* Status */}
                           <td className="py-4 px-5 text-center">
                             <span
                               className={`inline-flex items-center px-3 py-1.5 rounded-full text-[11px] font-bold ${
                                 isReturned
-                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
-                                  : "bg-rose-50 text-rose-700 border border-rose-100"
+                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                  : "bg-rose-50 text-rose-700 border border-rose-200"
                               }`}
                             >
                               <span
@@ -247,8 +284,7 @@ export default function RiwayatSayaPage() {
                                   isReturned ? "bg-emerald-500" : "bg-rose-500"
                                 }`}
                               />
-
-                              {row.status}
+                              {displayStatus}
                             </span>
                           </td>
                         </tr>

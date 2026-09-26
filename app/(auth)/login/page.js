@@ -43,11 +43,29 @@ export default function LoginPage() {
 
       const tokenValue = data.token || data.access_token || "dummy_token";
 
-      let rawUser = data.user || data.data || data || {};
-      if (Array.isArray(rawUser)) {
-        rawUser = rawUser[0] || {};
+      // 1. Dapatkan objek user dari berbagai kemungkinan lokasi pembungkus API
+      let rawUser = {};
+      if (data.user && typeof data.user === "object") {
+        rawUser = Array.isArray(data.user) ? data.user[0] : data.user;
+      } else if (data.data && typeof data.data === "object") {
+        rawUser = Array.isArray(data.data) ? data.data[0] : data.data;
+      } else {
+        rawUser = data;
       }
 
+      // 2. Ekstrak nama untuk tampilan Navbar & Profile
+      const extractedName =
+        rawUser.nama ||
+        rawUser.nama_user ||
+        rawUser.name ||
+        rawUser.username ||
+        data.nama ||
+        data.nama_user ||
+        data.name ||
+        data.username ||
+        (email ? email.split("@")[0] : "Pengguna");
+
+      // 3. Tentukan role
       const apiRole = String(rawUser.role || data.role || "")
         .trim()
         .toLowerCase();
@@ -56,10 +74,33 @@ export default function LoginPage() {
         email.toLowerCase().includes("admin");
       const finalRole = apiRole === "admin" || isEmailAdmin ? "admin" : "user";
 
+      // 4. Cari ID dari semua kemungkinan key yang biasa dipakai API
+      const userId =
+        rawUser.id ||
+        rawUser._id ||
+        rawUser.user_id ||
+        rawUser.id_user ||
+        data.id ||
+        data._id ||
+        data.user_id ||
+        "";
+
+      // 5. Susun userData dengan menyatukan seluruh response API + pemetaan key standar
       const userData = {
-        ...rawUser,
+        ...data,         // Ambil level paling luar
+        ...rawUser,      // Ambil level inner user
+        id: userId,
+        _id: userId,
+        user_id: userId,
+        id_user: userId,
+        nama: extractedName,
+        name: extractedName,
+        email: rawUser.email || data.email || email,
         role: finalRole,
       };
+
+      // Cek console F12 browser untuk melihat data lengkap yang disimpan
+      console.log("LOG USER DATA DIPROSES:", userData);
 
       setToken(tokenValue);
       setUserProfile(userData);
@@ -68,7 +109,7 @@ export default function LoginPage() {
       if (finalRole === "admin") {
         window.location.href = "/dashboard";
       } else {
-        window.location.href = "/barang";
+        window.location.href = "/";
       }
     } catch (error) {
       setErrorMsg(error.message);
@@ -81,14 +122,12 @@ export default function LoginPage() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative px-4 py-8"
       style={{ backgroundImage: "url('/images/bg-auth.jpg')" }}
     >
-      {/* Overlay terang transparan */}
       <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[2px]" />
 
       <form
         onSubmit={handleLogin}
         className="relative z-10 w-full max-w-md bg-white/90 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl border border-white/60 transition-all duration-300"
       >
-        {/* Header / Brand */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl overflow-hidden shadow-sm mb-3">
             <Image
@@ -107,7 +146,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Pesan Error */}
         {errorMsg && (
           <div className="flex items-center gap-2.5 p-3.5 mb-6 text-xs text-red-600 bg-red-50/90 rounded-2xl border border-red-200/80 animate-shake">
             <svg
@@ -127,7 +165,6 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Input Email */}
         <div className="mb-5">
           <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
             Email
@@ -159,7 +196,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Input Password */}
         <div className="mb-7">
           <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
             Password
@@ -191,7 +227,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Tombol Submit */}
         <button
           type="submit"
           disabled={isLoading}
@@ -225,7 +260,6 @@ export default function LoginPage() {
           )}
         </button>
 
-        {/* Footer / Register Link */}
         <p className="text-center text-xs text-slate-600 font-medium">
           Belum punya akun?{" "}
           <Link
