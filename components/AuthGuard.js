@@ -12,6 +12,7 @@ export default function AuthGuard({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsAuthorized(false);
 
     const token = getToken();
