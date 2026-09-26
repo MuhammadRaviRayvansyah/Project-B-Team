@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { getPeminjaman, getBarang, getUsers, api } from "@/lib/api";
 import StatusBadge from "../components/StatusBadge";
@@ -12,8 +12,9 @@ export default function ManajemenPeminjamanPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [feedback, setFeedback] = useState("");
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const [pemRes, barRes, userRes] = await Promise.all([
         getPeminjaman(),
         getBarang(),
@@ -40,21 +41,11 @@ export default function ManajemenPeminjamanPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchData();
   }, []);
 
-  const handleUpdateStatus = async (id, newStatus) => {
-    try {
-      await api.put(`/peminjaman/${id}`, { status: newStatus });
-      fetchData();
-    } catch (error) {
-      alert("Gagal memperbarui status.");
-    }
-  };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleDelete = async (id) => {
     const konfirmasi = window.confirm(
@@ -65,7 +56,7 @@ export default function ManajemenPeminjamanPage() {
     try {
       await api.delete(`/peminjaman/${id}`);
       setFeedback("Data peminjaman berhasil dihapus.");
-      setTimeout(() => setFeedback(""), 3000);
+      setTimeout(() => setFeedback(""), 3500);
       fetchData();
     } catch (error) {
       alert("Gagal menghapus data peminjaman.");
@@ -113,7 +104,7 @@ export default function ManajemenPeminjamanPage() {
             Total: {peminjaman.length} Pengajuan
           </span>
         </div>
-        
+
         <div className="w-full overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[850px] whitespace-nowrap">
             <thead>
@@ -153,10 +144,6 @@ export default function ManajemenPeminjamanPage() {
                     userMap[item.id_user]?.nama ||
                     `Pengguna (ID: ${item.id_user})`;
                   const peminjamEmail = userMap[item.id_user]?.email || "";
-
-                  const statusStr = String(item.status || "").toLowerCase();
-                  const isPending = statusStr === "pending" || statusStr === "menunggu persetujuan";
-                  const isActive = ["disetujui", "dipinjam"].includes(statusStr);
 
                   return (
                     <tr key={itemId} className="hover:bg-slate-50/60 transition-colors">
@@ -198,38 +185,12 @@ export default function ManajemenPeminjamanPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <Link
                             href={`/manajemen-peminjaman/${itemId}`}
-                            className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors inline-flex"
-                            title="Edit Data Peminjaman"
+                            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-xs transition-colors inline-flex items-center gap-1"
+                            title="Kelola & Ubah Status"
                           >
-                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                            <span className="material-symbols-outlined text-[16px]">edit</span>
+                            <span>Kelola</span>
                           </Link>
-                          {isPending && (
-                            <>
-                              <button
-                                onClick={() => handleUpdateStatus(itemId, "dipinjam")}
-                                className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg font-bold text-xs transition-colors"
-                                title="Setujui dan ubah ke Dipinjam"
-                              >
-                                Setujui
-                              </button>
-                              <button
-                                onClick={() => handleUpdateStatus(itemId, "ditolak")}
-                                className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-bold text-xs transition-colors"
-                                title="Tolak Pengajuan"
-                              >
-                                Tolak
-                              </button>
-                            </>
-                          )}
-                          {isActive && (
-                            <button
-                              onClick={() => handleUpdateStatus(itemId, "selesai")}
-                              className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg font-bold text-xs transition-colors"
-                              title="Tandai Selesai / Dikembalikan"
-                            >
-                              Selesai
-                            </button>
-                          )}
                           <button
                             onClick={() => handleDelete(itemId)}
                             className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors inline-flex"
