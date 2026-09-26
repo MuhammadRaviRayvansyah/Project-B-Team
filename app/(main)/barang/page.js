@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { getBarang, getKategori, getReview } from "@/lib/api";
-import ItemCard from "@/components/ItemCard";
-import ItemFilter from "@/components/filter";
+import ItemCard from "@/components/share-main/item-card";
+import ItemFilter from "@/components/barang/filter";
 import Header from "@/components/share-main/header";
 
 export default function BarangPage() {
   const [barangList, setBarangList] = useState([]);
   const [kategoriList, setKategoriList] = useState([]);
   const [reviewList, setReviewList] = useState([]);
-  
+
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState("");
   const [kategoriAktif, setKategoriAktif] = useState("Semua");
@@ -86,13 +86,28 @@ export default function BarangPage() {
 
     // 5. Urutan Harga
     if (sortFilter === "termurah") {
-      result.sort((a, b) => Number(a.harga_sewa || a.hargaPerHari || 0) - Number(b.harga_sewa || b.hargaPerHari || 0));
+      result.sort(
+        (a, b) =>
+          Number(a.harga_sewa || a.hargaPerHari || 0) -
+          Number(b.harga_sewa || b.hargaPerHari || 0),
+      );
     } else if (sortFilter === "termahal") {
-      result.sort((a, b) => Number(b.harga_sewa || b.hargaPerHari || 0) - Number(a.harga_sewa || a.hargaPerHari || 0));
+      result.sort(
+        (a, b) =>
+          Number(b.harga_sewa || b.hargaPerHari || 0) -
+          Number(a.harga_sewa || a.hargaPerHari || 0),
+      );
     }
 
     return result;
-  }, [barangList, searchQuery, kategoriAktif, ukuranAktif, stokFilter, sortFilter]);
+  }, [
+    barangList,
+    searchQuery,
+    kategoriAktif,
+    ukuranAktif,
+    stokFilter,
+    sortFilter,
+  ]);
 
   const handleResetFilter = () => {
     setSearchQuery("");
@@ -206,13 +221,16 @@ export default function BarangPage() {
                 Barang Tidak Ditemukan
               </h3>
               <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
-                Tidak ada pakaian atau perlengkapan yang cocok dengan kriteria pencarian dan filter saat ini.
+                Tidak ada pakaian atau perlengkapan yang cocok dengan kriteria
+                pencarian dan filter saat ini.
               </p>
               <button
                 onClick={handleResetFilter}
                 className="mt-6 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm inline-flex items-center gap-1.5"
               >
-                <span className="material-symbols-outlined text-sm">restart_alt</span>
+                <span className="material-symbols-outlined text-sm">
+                  restart_alt
+                </span>
                 Reset Semua Filter
               </button>
             </div>
@@ -228,7 +246,11 @@ export default function BarangPage() {
               </span>{" "}
               dari {barangList.length} barang
             </p>
-            {(searchQuery || kategoriAktif !== "Semua" || ukuranAktif !== "Semua" || stokFilter !== "Semua" || sortFilter !== "Semua") && (
+            {(searchQuery ||
+              kategoriAktif !== "Semua" ||
+              ukuranAktif !== "Semua" ||
+              stokFilter !== "Semua" ||
+              sortFilter !== "Semua") && (
               <button
                 onClick={handleResetFilter}
                 className="text-xs text-amber-600 hover:text-amber-700 font-bold"

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getReview, getBarang, getUsers, api } from "@/lib/api";
-import RatingStars from "@/components/RatingStars";
+import RatingStars from "@/components/review/rating-stars";
 
 export default function ManajemenReviewPage() {
   const [reviews, setReviews] = useState([]);
@@ -51,16 +51,31 @@ export default function ManajemenReviewPage() {
   // Helper untuk mendapatkan detail nama & gambar barang
   const getBarangInfo = (rev) => {
     const targetId = String(
-      rev.id_barang || rev.barang_id || rev.barang?.id_barang || rev.barang?.id || ""
+      rev.id_barang ||
+        rev.barang_id ||
+        rev.barang?.id_barang ||
+        rev.barang?.id ||
+        "",
     );
-    
+
     const barang = barangList.find(
-      (b) => String(b.id_barang || b.id) === targetId
+      (b) => String(b.id_barang || b.id) === targetId,
     );
 
     return {
-      nama: rev.barang?.nama_barang || rev.nama_barang || barang?.nama_barang || barang?.nama || "Barang Tidak Ditemukan",
-      gambar: rev.barang?.gambar || rev.gambar_barang || rev.gambar || barang?.gambar || barang?.img || "",
+      nama:
+        rev.barang?.nama_barang ||
+        rev.nama_barang ||
+        barang?.nama_barang ||
+        barang?.nama ||
+        "Barang Tidak Ditemukan",
+      gambar:
+        rev.barang?.gambar ||
+        rev.gambar_barang ||
+        rev.gambar ||
+        barang?.gambar ||
+        barang?.img ||
+        "",
     };
   };
 
@@ -73,7 +88,8 @@ export default function ManajemenReviewPage() {
             Manajemen Rating & Review
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Pantau dan moderasi ulasan, testimoni, dan penilaian dari pengguna terhadap pakaian acara.
+            Pantau dan moderasi ulasan, testimoni, dan penilaian dari pengguna
+            terhadap pakaian acara.
           </p>
         </div>
       </div>
@@ -82,7 +98,9 @@ export default function ManajemenReviewPage() {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm flex flex-col overflow-hidden">
         <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-slate-700 text-xl">star</span>
+            <span className="material-symbols-outlined text-slate-700 text-xl">
+              star
+            </span>
             <h2 className="text-base font-bold text-slate-900">
               Daftar Ulasan Masuk
             </h2>
@@ -117,9 +135,16 @@ export default function ManajemenReviewPage() {
                 <tr>
                   <td colSpan="5" className="text-center py-16 text-slate-500">
                     <div className="flex flex-col items-center justify-center gap-2">
-                      <span className="material-symbols-outlined text-3xl text-slate-300">rate_review</span>
-                      <p className="font-semibold text-slate-700">Belum ada ulasan dari pengguna.</p>
-                      <p className="text-xs text-slate-400">Ulasan akan muncul secara otomatis ketika peminjam memberikan review.</p>
+                      <span className="material-symbols-outlined text-3xl text-slate-300">
+                        rate_review
+                      </span>
+                      <p className="font-semibold text-slate-700">
+                        Belum ada ulasan dari pengguna.
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        Ulasan akan muncul secara otomatis ketika peminjam
+                        memberikan review.
+                      </p>
                     </div>
                   </td>
                 </tr>
@@ -136,7 +161,10 @@ export default function ManajemenReviewPage() {
                     rev.tanggal_review || rev.tanggal || rev.created_at || "-";
 
                   return (
-                    <tr key={revId} className="hover:bg-slate-50/60 transition-colors">
+                    <tr
+                      key={revId}
+                      className="hover:bg-slate-50/60 transition-colors"
+                    >
                       <td className="px-5 py-4 font-bold text-slate-900">
                         <div className="flex items-center gap-3">
                           {barangInfo.gambar ? (
@@ -186,7 +214,9 @@ export default function ManajemenReviewPage() {
                           className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors inline-flex"
                           title="Hapus Ulasan"
                         >
-                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                          <span className="material-symbols-outlined text-[18px]">
+                            delete
+                          </span>
                         </button>
                       </td>
                     </tr>

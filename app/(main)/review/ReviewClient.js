@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createReviewAction } from "@/app/actions/review";
-import ReviewList from "@/components/ReviewList";
+import ReviewList from "@/components/review/review-list";
 
 export default function ReviewClient({ barangList, reviewList }) {
   const [selectedId, setSelectedId] = useState("");

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { getUserProfile, clearToken } from "@/lib/token";
 import { useUser } from "@/components/UserContexts";
-import EditProfile from "@/components/EditProfile";
+import EditProfile from "@/components/global/setting";
 
 export default function Navbar() {
   const router = useRouter();
@@ -21,14 +21,14 @@ export default function Navbar() {
   const isUser = Boolean(activeUser && !isAdmin);
 
   let navLinks = [
-    { name: "Beranda", path: "/" }, 
+    { name: "Beranda", path: "/" },
     { name: "Barang", path: "/barang" },
   ];
 
   if (isUser) {
     navLinks.push(
       { name: "Peminjaman", path: "/peminjaman" },
-      { name: "Riwayat", path: "/riwayat" }
+      { name: "Riwayat", path: "/riwayat" },
     );
   }
 
@@ -52,13 +52,12 @@ export default function Navbar() {
       <nav className="bg-amber-400 sticky top-0 z-50 text-slate-900 shadow-md shadow-amber-900/10 transition-all">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="flex justify-between h-20 items-center">
-            
             {/* Logo Brand */}
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full bg-white overflow-hidden flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                <Image 
-                  src="/images/logo.jpeg" 
-                  alt="Logo PEPAC" 
+                <Image
+                  src="/images/logo.jpeg"
+                  alt="Logo PEPAC"
                   width={63}
                   height={63}
                   className="w-full h-full object-cover"
@@ -113,8 +112,8 @@ export default function Navbar() {
                   </span>
                 </button>
               ) : (
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-full text-xs font-bold shadow-md transition-all active:scale-95"
                 >
                   Masuk / Daftar
@@ -123,11 +122,13 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
               className="md:hidden p-2 text-slate-900 hover:bg-black/10 rounded-full transition-colors cursor-pointer"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <span className="material-symbols-outlined">{isMobileMenuOpen ? "close" : "menu"}</span>
+              <span className="material-symbols-outlined">
+                {isMobileMenuOpen ? "close" : "menu"}
+              </span>
             </button>
           </div>
         </div>
@@ -143,8 +144,8 @@ export default function Navbar() {
                   href={link.path}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`block px-4 py-2.5 rounded-full text-xs font-semibold transition-all ${
-                    isActive 
-                      ? "bg-slate-900 text-white font-bold" 
+                    isActive
+                      ? "bg-slate-900 text-white font-bold"
                       : "text-slate-900 hover:bg-black/10"
                   }`}
                 >
@@ -152,7 +153,7 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            
+
             <div className="pt-2 border-t border-black/10">
               {activeUser ? (
                 <button
@@ -165,12 +166,14 @@ export default function Navbar() {
                   <div className="w-5 h-5 rounded-full bg-amber-400 text-slate-900 flex items-center justify-center text-[10px] font-black shrink-0">
                     {displayName.charAt(0).toUpperCase()}
                   </div>
-                  <span className="truncate">{displayName} (Pengaturan Profil)</span>
+                  <span className="truncate">
+                    {displayName} (Pengaturan Profil)
+                  </span>
                 </button>
               ) : (
-                <Link 
-                  href="/login" 
-                  onClick={() => setIsMobileMenuOpen(false)} 
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold text-center shadow-md"
                 >
                   Masuk / Daftar

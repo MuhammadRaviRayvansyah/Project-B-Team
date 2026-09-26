@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import ItemCard from "@/components/ItemCard";
+import ItemCard from "@/components/share-main/item-card";
 import { getKategori, getBarang } from "@/lib/api";
 import CaraPeminjaman from "@/components/beranda/cara-peminjaman";
 import KeunggulanPepac from "@/components/beranda/keunggulan-pepac";
@@ -18,7 +18,10 @@ export default function BerandaPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [katRes, barRes] = await Promise.all([getKategori(), getBarang()]);
+        const [katRes, barRes] = await Promise.all([
+          getKategori(),
+          getBarang(),
+        ]);
 
         const rawKat = Array.isArray(katRes) ? katRes : [];
         const rawBar = Array.isArray(barRes) ? barRes : [];
@@ -43,7 +46,6 @@ export default function BerandaPage() {
           }
         });
         setKategoriCounts(kCounts);
-
       } catch (error) {
         setIsError(true);
       } finally {
@@ -57,11 +59,10 @@ export default function BerandaPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900 antialiased font-sans">
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1">
-
         {/* ================= HERO SECTION ================= */}
         <section className="relative rounded-[32px] overflow-hidden min-h-[500px] lg:min-h-[540px] flex items-center mb-12 shadow-2xl">
           {/* Background Image */}
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: "url('/images/bg-beranda.jpg')" }}
           />
@@ -71,7 +72,6 @@ export default function BerandaPage() {
 
           {/* Hero Content Grid */}
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-10 lg:py-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-            
             {/* Side Kiri: Title, Subtitle, & CTA Button */}
             <div className="lg:col-span-7 space-y-5">
               <p className="text-[11px] font-extrabold tracking-[0.2em] text-amber-300 uppercase">
@@ -79,11 +79,13 @@ export default function BerandaPage() {
               </p>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
-                Tampil Rapi & Percaya Diri di Setiap <span className="text-amber-400">Acara Kampus</span>
+                Tampil Rapi & Percaya Diri di Setiap{" "}
+                <span className="text-amber-400">Acara Kampus</span>
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed max-w-xl">
-                Temukan dan pinjam batik, jas, sepatu, serta perlengkapan acara kampus secara praktis, cepat, dan terintegrasi.
+                Temukan dan pinjam batik, jas, sepatu, serta perlengkapan acara
+                kampus secara praktis, cepat, dan terintegrasi.
               </p>
 
               <div className="pt-2">
@@ -92,11 +94,12 @@ export default function BerandaPage() {
                   className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-full text-xs sm:text-sm font-bold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 active:scale-95"
                 >
                   <span>Mulai Cari Barang</span>
-                  <span className="material-symbols-outlined text-base">arrow_forward</span>
+                  <span className="material-symbols-outlined text-base">
+                    arrow_forward
+                  </span>
                 </Link>
               </div>
             </div>
-
           </div>
         </section>
 
@@ -110,14 +113,18 @@ export default function BerandaPage() {
               Pilihan Kategori Busana
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5">
-              Temukan berbagai pilihan pakaian berdasarkan kategori kebutuhan acara Anda
+              Temukan berbagai pilihan pakaian berdasarkan kategori kebutuhan
+              acara Anda
             </p>
           </div>
 
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-36 bg-slate-100 rounded-2xl animate-pulse" />
+                <div
+                  key={i}
+                  className="h-36 bg-slate-100 rounded-2xl animate-pulse"
+                />
               ))}
             </div>
           ) : (
@@ -146,7 +153,8 @@ export default function BerandaPage() {
 
                       {/* Description */}
                       <p className="text-xs text-slate-600 leading-relaxed mb-6">
-                        Koleksi pakaian kategori {namaKategori.toLowerCase()} yang siap dipinjam untuk melengkapi acara Anda.
+                        Koleksi pakaian kategori {namaKategori.toLowerCase()}{" "}
+                        yang siap dipinjam untuk melengkapi acara Anda.
                       </p>
                     </div>
 
@@ -168,22 +176,30 @@ export default function BerandaPage() {
         <section className="py-6">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900">Katalog Pilihan</h2>
-              <p className="text-xs text-slate-500 mt-1">Koleksi busana dan perlengkapan siap sewa</p>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+                Katalog Pilihan
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">
+                Koleksi busana dan perlengkapan siap sewa
+              </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <Link 
-                href="/barang" 
+              <Link
+                href="/barang"
                 className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors text-slate-700"
               >
-                <span className="material-symbols-outlined text-sm">chevron_left</span>
+                <span className="material-symbols-outlined text-sm">
+                  chevron_left
+                </span>
               </Link>
-              <Link 
-                href="/barang" 
+              <Link
+                href="/barang"
                 className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-colors"
               >
-                <span className="material-symbols-outlined text-sm">chevron_right</span>
+                <span className="material-symbols-outlined text-sm">
+                  chevron_right
+                </span>
               </Link>
             </div>
           </div>
@@ -191,11 +207,16 @@ export default function BerandaPage() {
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="aspect-[4/5] bg-slate-100 rounded-2xl animate-pulse" />
+                <div
+                  key={i}
+                  className="aspect-[4/5] bg-slate-100 rounded-2xl animate-pulse"
+                />
               ))}
             </div>
           ) : isError ? (
-            <div className="p-4 bg-rose-50 rounded-2xl text-rose-600 text-xs">Gagal memuat katalog barang.</div>
+            <div className="p-4 bg-rose-50 rounded-2xl text-rose-600 text-xs">
+              Gagal memuat katalog barang.
+            </div>
           ) : barangList.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {barangList.map((b) => {
@@ -222,9 +243,9 @@ export default function BerandaPage() {
           )}
         </section>
 
-          <CaraPeminjaman />
-          
-          <KeunggulanPepac />
+        <CaraPeminjaman />
+
+        <KeunggulanPepac />
       </main>
     </div>
   );

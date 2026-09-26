@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ProfileSidebar from "@/components/ProfileSidebar";
+import ProfileSidebar from "@/components/share-admin/sidebar";
 import Image from "next/image";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
