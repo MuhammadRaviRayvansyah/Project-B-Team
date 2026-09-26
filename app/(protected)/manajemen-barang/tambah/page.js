@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getKategori, api } from "@/lib/api";
-import Hero from "@/components/Hero";
 
 export default function TambahBarangPage() {
   const router = useRouter();
@@ -49,12 +48,6 @@ export default function TambahBarangPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-3xl mx-auto pb-12 px-4 sm:px-6">
-      <Hero
-        category="ADMIN • BARANG"
-        title="Tambah Barang Baru"
-        description="Masukkan data perlengkapan atau pakaian kampus baru ke katalog."
-      />
-
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm space-y-4">
         {errorMsg && (
           <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-600 font-medium">

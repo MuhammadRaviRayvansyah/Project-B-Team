@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { getReview, getBarang, api } from "@/lib/api";
-import Hero from "@/components/Hero";
 import RatingStars from "@/components/RatingStars";
 
 export default function ManajemenReviewPage() {
@@ -43,11 +42,6 @@ export default function ManajemenReviewPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-6xl mx-auto pb-12 px-4 sm:px-6">
-      <Hero
-        category="ADMINISTRASI"
-        title="Monitoring Review"
-        description="Pantau dan kelola ulasan yang diberikan oleh pengguna untuk setiap barang."
-      />
 
       <div className="bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">

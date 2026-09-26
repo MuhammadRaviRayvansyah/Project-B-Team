@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { getPeminjaman, getBarang, api } from "@/lib/api";
-import Hero from "@/components/Hero";
 
 export default function ManajemenPeminjamanPage() {
   const [peminjaman, setPeminjaman] = useState([]);
@@ -41,11 +40,6 @@ export default function ManajemenPeminjamanPage() {
 
   return (
     <div className="grid grid-cols-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-12 gap-6">
-      <Hero
-        category="ADMINISTRASI"
-        title="Manajemen Peminjaman"
-        description="Pantau, setujui, tolak, atau selesaikan transaksi penyewaan barang yang diajukan oleh pengguna."
-      />
 
       <div className="w-full min-w-0 bg-white border border-slate-200/60 rounded-2xl shadow-sm flex flex-col overflow-hidden">
         <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between w-full">

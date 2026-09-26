@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { getBarang, getKategori, getReview } from "@/lib/api";
 import ItemCard from "@/components/ItemCard";
-import Hero from "@/components/Hero";
+import Header from "@/components/share-main/header";
 
 export default function BarangPage() {
   const [barangList, setBarangList] = useState([]);
@@ -18,75 +18,144 @@ export default function BarangPage() {
         const [barRes, katRes, revRes] = await Promise.all([
           getBarang(),
           getKategori(),
-          getReview()
+          getReview(),
         ]);
+
         setBarangList(Array.isArray(barRes) ? barRes : []);
         setKategoriList(Array.isArray(katRes) ? katRes : []);
         setReviewList(Array.isArray(revRes) ? revRes : []);
       } catch (error) {
+        console.error("Gagal memuat data katalog:", error);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
-  const barangTampil = kategoriAktif === "Semua"
-    ? barangList
-    : barangList.filter((b) => Number(b.id_kategori) === Number(kategoriAktif));
+  // Filter barang berdasarkan kategori
+  const barangTampil =
+    kategoriAktif === "Semua"
+      ? barangList
+      : barangList.filter(
+          (b) => Number(b.id_kategori) === Number(kategoriAktif),
+        );
 
   return (
-    <div className="min-h-screen bg-[#f7f9ff] pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col gap-6">
-        <Hero
-          category="KATALOG KAMPUS"
-          title="Koleksi Barang"
-          description="Eksplorasi perlengkapan dan pakaian yang tersedia untuk menunjang kegiatan Anda."
+    <div className="min-h-screen bg-white text-slate-900 pb-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Header
+          category="Katalog"
+          title="Katalog Barang"
+          description="Temukan berbagai pakaian dan perlengkapan yang tersedia untuk
+              menunjang kebutuhan kegiatan kampus Anda."
         />
+        <section className="pt-8">
+          <div>
+            <h2 className="text-lg font-extrabold text-slate-900">
+              Pilih Kategori
+            </h2>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          <button
-            onClick={() => setKategoriAktif("Semua")}
-            className={`px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${
-              kategoriAktif === "Semua" ? "bg-[#181c20] text-white shadow-sm" : "bg-white text-slate-600 hover:bg-slate-50 border border-slate-200"
-            }`}
-          >
-            Semua
-          </button>
-          {kategoriList.map((kat) => (
+            <p className="text-xs text-slate-500 mt-1">
+              Tampilkan barang berdasarkan kategori pakaian
+            </p>
+          </div>
+
+          {/* Category Pills */}
+          <div className="mt-5 flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
+            {/* Semua */}
             <button
-              key={kat.id_kategori || kat.id}
-              onClick={() => setKategoriAktif(kat.id_kategori || kat.id)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${
-                kategoriAktif === (kat.id_kategori || kat.id) ? "bg-[#181c20] text-white shadow-sm" : "bg-white text-slate-600 hover:bg-slate-50 border border-slate-200"
+              onClick={() => setKategoriAktif("Semua")}
+              className={`shrink-0 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 ${
+                kategoriAktif === "Semua"
+                  ? "bg-slate-900 text-white shadow-md"
+                  : "bg-white text-slate-600 border border-slate-200 hover:border-amber-400 hover:text-amber-600"
               }`}
             >
-              {kat.nama_kategori || kat.nama}
+              Semua
             </button>
-          ))}
-        </div>
 
-        {isLoading ? (
-          <div className="text-center py-20 text-slate-500 font-medium">Memuat katalog...</div>
-        ) : barangTampil.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {barangTampil.map((item) => {
-              const ulasanItem = reviewList.filter((r) => String(r.id_barang) === String(item.id_barang || item.id));
+            {/* Kategori dari API */}
+            {kategoriList.map((kat) => {
+              const katId = kat.id_kategori || kat.id;
+
+              const isActive = String(kategoriAktif) === String(katId);
+
               return (
-                <ItemCard 
-                  key={item.id_barang || item.id} 
-                  {...item} 
-                  ulasan={ulasanItem}
-                />
+                <button
+                  key={katId}
+                  onClick={() => setKategoriAktif(katId)}
+                  className={`shrink-0 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 ${
+                    isActive
+                      ? "bg-slate-900 text-white shadow-md"
+                      : "bg-white text-slate-600 border border-slate-200 hover:border-amber-400 hover:text-amber-600"
+                  }`}
+                >
+                  {kat.nama_kategori || kat.nama}
+                </button>
               );
             })}
           </div>
-        ) : (
-          <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 text-slate-500 font-medium">
-            Tidak ada barang di kategori ini.
+        </section>
+
+        <section className="mt-8">
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl border border-slate-200 overflow-hidden animate-pulse"
+                >
+                  {/* Image Skeleton */}
+                  <div className="aspect-[4/5] bg-slate-100" />
+
+                  {/* Content Skeleton */}
+                  <div className="p-4 space-y-3">
+                    <div className="h-3 bg-slate-100 rounded w-1/3" />
+
+                    <div className="h-4 bg-slate-100 rounded w-4/5" />
+
+                    <div className="h-3 bg-slate-100 rounded w-1/2" />
+
+                    <div className="h-8 bg-slate-100 rounded-xl mt-4" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : barangTampil.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {barangTampil.map((item) => {
+                const itemId = item.id_barang || item.id;
+
+                const ulasanItem = reviewList.filter(
+                  (r) => String(r.id_barang) === String(itemId),
+                );
+
+                return <ItemCard key={itemId} {...item} ulasan={ulasanItem} />;
+              })}
+            </div>
+          ) : (
+            <div className="border border-slate-200 bg-slate-50 rounded-3xl py-20 px-6 text-center">
+              <h3 className="mt-5 text-lg font-extrabold text-slate-900">
+                Barang Tidak Ditemukan
+              </h3>
+            </div>
+          )}
+        </section>
+
+        {!isLoading && barangTampil.length > 0 && (
+          <div className="mt-10 pt-6 border-t border-slate-200">
+            <p className="text-xs text-slate-500">
+              Menampilkan{" "}
+              <span className="font-bold text-slate-700">
+                {barangTampil.length}
+              </span>{" "}
+              barang
+            </p>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

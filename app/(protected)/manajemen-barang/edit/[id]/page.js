@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getBarang, api } from "@/lib/api";
-import Hero from "@/components/Hero";
 
 export default function ManajemenBarangPage() {
   const [barang, setBarang] = useState([]);
@@ -36,11 +35,6 @@ export default function ManajemenBarangPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
-      <Hero
-        category="ADMINISTRASI"
-        title="Manajemen Barang"
-        description="Kelola katalog perlengkapan, tambah data baru, ubah rincian, atau hapus barang yang tidak lagi tersedia."
-      />
 
       <div className="bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
