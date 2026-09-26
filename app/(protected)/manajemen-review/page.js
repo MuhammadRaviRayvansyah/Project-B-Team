@@ -48,14 +48,25 @@ export default function ManajemenReviewPage() {
     }
   };
 
-  const getNamaBarang = (idBarang) => {
-    const barang = barangList.find(b => String(b.id_barang || b.id) === String(idBarang));
-    return barang ? (barang.nama_barang || barang.nama) : "Barang Tidak Ditemukan";
+  // Helper untuk mendapatkan detail nama & gambar barang
+  const getBarangInfo = (rev) => {
+    const targetId = String(
+      rev.id_barang || rev.barang_id || rev.barang?.id_barang || rev.barang?.id || ""
+    );
+    
+    const barang = barangList.find(
+      (b) => String(b.id_barang || b.id) === targetId
+    );
+
+    return {
+      nama: rev.barang?.nama_barang || rev.nama_barang || barang?.nama_barang || barang?.nama || "Barang Tidak Ditemukan",
+      gambar: rev.barang?.gambar || rev.gambar_barang || rev.gambar || barang?.gambar || barang?.img || "",
+    };
   };
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-12 space-y-6">
-      {/* Header Halaman Konsisten */}
+      {/* Header Halaman */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
@@ -82,10 +93,9 @@ export default function ManajemenReviewPage() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px]">
+          <table className="w-full text-left border-collapse min-w-[750px]">
             <thead>
               <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] uppercase tracking-wider text-slate-500">
-                <th className="px-5 py-4 font-bold">ID</th>
                 <th className="px-5 py-4 font-bold">Barang</th>
                 <th className="px-5 py-4 font-bold">Pereview & Tanggal</th>
                 <th className="px-5 py-4 font-bold">Rating</th>
@@ -96,7 +106,7 @@ export default function ManajemenReviewPage() {
             <tbody className="text-xs sm:text-sm divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-slate-500">
+                  <td colSpan="5" className="text-center py-16 text-slate-500">
                     <div className="inline-flex items-center gap-2">
                       <span className="w-4 h-4 border-2 border-slate-300 border-t-slate-800 rounded-full animate-spin" />
                       <span>Memuat data ulasan...</span>
@@ -105,7 +115,7 @@ export default function ManajemenReviewPage() {
                 </tr>
               ) : reviews.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-slate-500">
+                  <td colSpan="5" className="text-center py-16 text-slate-500">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <span className="material-symbols-outlined text-3xl text-slate-300">rate_review</span>
                       <p className="font-semibold text-slate-700">Belum ada ulasan dari pengguna.</p>
@@ -116,6 +126,7 @@ export default function ManajemenReviewPage() {
               ) : (
                 reviews.map((rev) => {
                   const revId = rev.id_review || rev.id;
+                  const barangInfo = getBarangInfo(rev);
                   const revNama =
                     rev.nama_user ||
                     rev.nama ||
@@ -127,10 +138,24 @@ export default function ManajemenReviewPage() {
                   return (
                     <tr key={revId} className="hover:bg-slate-50/60 transition-colors">
                       <td className="px-5 py-4 font-bold text-slate-900">
-                        #{revId}
-                      </td>
-                      <td className="px-5 py-4 font-bold text-slate-900">
-                        {getNamaBarang(rev.id_barang)}
+                        <div className="flex items-center gap-3">
+                          {barangInfo.gambar ? (
+                            <img
+                              src={barangInfo.gambar}
+                              alt={barangInfo.nama}
+                              className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+                              <span className="material-symbols-outlined text-slate-400 text-lg">
+                                inventory_2
+                              </span>
+                            </div>
+                          )}
+                          <span className="line-clamp-2 max-w-[220px]">
+                            {barangInfo.nama}
+                          </span>
+                        </div>
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex flex-col">

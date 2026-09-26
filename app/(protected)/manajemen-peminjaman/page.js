@@ -63,11 +63,28 @@ export default function ManajemenPeminjamanPage() {
     }
   };
 
-  const getNamaBarang = (idBarang) => {
+  // Helper untuk mendapatkan nama & gambar barang
+  const getBarangInfo = (item) => {
+    const idBarang = item.id_barang || item.barang_id;
     const barang = barangList.find(
       (b) => String(b.id_barang || b.id) === String(idBarang)
     );
-    return barang ? barang.nama_barang || barang.nama : "Barang Tidak Ditemukan";
+
+    return {
+      nama:
+        item.nama_barang ||
+        item.barang?.nama_barang ||
+        barang?.nama_barang ||
+        barang?.nama ||
+        "Barang Tidak Ditemukan",
+      gambar:
+        item.gambar ||
+        item.gambar_barang ||
+        item.barang?.gambar ||
+        barang?.gambar ||
+        barang?.img ||
+        "",
+    };
   };
 
   return (
@@ -106,10 +123,9 @@ export default function ManajemenPeminjamanPage() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[850px] whitespace-nowrap">
+          <table className="w-full text-left border-collapse min-w-[800px] whitespace-nowrap">
             <thead>
               <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] uppercase tracking-wider text-slate-500">
-                <th className="px-5 py-4 font-bold">ID Transaksi</th>
                 <th className="px-5 py-4 font-bold">Informasi Barang</th>
                 <th className="px-5 py-4 font-bold">Nama Peminjam</th>
                 <th className="px-5 py-4 font-bold">Periode Pinjam</th>
@@ -120,7 +136,7 @@ export default function ManajemenPeminjamanPage() {
             <tbody className="text-xs sm:text-sm divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-slate-500">
+                  <td colSpan="5" className="text-center py-16 text-slate-500">
                     <div className="inline-flex items-center gap-2">
                       <span className="w-4 h-4 border-2 border-slate-300 border-t-slate-800 rounded-full animate-spin" />
                       <span>Memuat data peminjaman...</span>
@@ -129,7 +145,7 @@ export default function ManajemenPeminjamanPage() {
                 </tr>
               ) : peminjaman.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-slate-500">
+                  <td colSpan="5" className="text-center py-16 text-slate-500">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <span className="material-symbols-outlined text-3xl text-slate-300">inbox</span>
                       <p className="font-semibold text-slate-700">Belum ada pengajuan peminjaman.</p>
@@ -139,6 +155,7 @@ export default function ManajemenPeminjamanPage() {
               ) : (
                 peminjaman.map((item) => {
                   const itemId = item.id_peminjaman || item.id;
+                  const barangInfo = getBarangInfo(item);
                   const peminjamNama =
                     item.user_nama ||
                     userMap[item.id_user]?.nama ||
@@ -147,17 +164,29 @@ export default function ManajemenPeminjamanPage() {
 
                   return (
                     <tr key={itemId} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="px-5 py-4 font-bold text-slate-900">
-                        #{itemId}
-                      </td>
                       <td className="px-5 py-4">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-800">
-                            {item.nama_barang || getNamaBarang(item.id_barang)}
-                          </span>
-                          <span className="text-[11px] text-slate-500 mt-0.5">
-                            Jumlah: {item.jumlah || 1} Unit • Total: Rp {Number(item.total_harga || 0).toLocaleString("id-ID")}
-                          </span>
+                        <div className="flex items-center gap-3">
+                          {barangInfo.gambar ? (
+                            <img
+                              src={barangInfo.gambar}
+                              alt={barangInfo.nama}
+                              className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+                              <span className="material-symbols-outlined text-slate-400 text-lg">
+                                inventory_2
+                              </span>
+                            </div>
+                          )}
+                          <div className="flex flex-col">
+                            <span className="font-bold text-slate-800 max-w-[220px] truncate">
+                              {barangInfo.nama}
+                            </span>
+                            <span className="text-[11px] text-slate-500 mt-0.5">
+                              Jumlah: {item.jumlah || 1} Unit • Total: Rp {Number(item.total_harga || 0).toLocaleString("id-ID")}
+                            </span>
+                          </div>
                         </div>
                       </td>
                       <td className="px-5 py-4">
