@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api, getBarang } from "@/lib/api";
 import Header from "@/components/share-main/header";
+import Image from "next/image";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -37,14 +38,14 @@ export default function ReviewPage() {
       const rawReviews = Array.isArray(reviewRes?.data)
         ? reviewRes.data
         : Array.isArray(reviewRes)
-        ? reviewRes
-        : [];
+          ? reviewRes
+          : [];
 
       const rawBarang = Array.isArray(barangRes?.data)
         ? barangRes.data
         : Array.isArray(barangRes)
-        ? barangRes
-        : [];
+          ? barangRes
+          : [];
 
       // Buat pemetaan (map) data barang untuk melengkapi gambar & nama jika API review tidak mengirim relation
       const barangMap = {};
@@ -61,7 +62,11 @@ export default function ReviewPage() {
       // Gabungkan data review dengan detail barang & nama user
       const mappedReviews = rawReviews.map((rev) => {
         const bId = String(
-          rev.id_barang || rev.barang_id || rev.barang?.id_barang || rev.barang?.id || ""
+          rev.id_barang ||
+            rev.barang_id ||
+            rev.barang?.id_barang ||
+            rev.barang?.id ||
+            "",
         );
         const detailBarang = barangMap[bId] || {};
 
@@ -76,13 +81,21 @@ export default function ReviewPage() {
           `Pengguna #${rev.id_user || "Anonim"}`;
 
         // Ekstraksi Foto / Avatar Pemberi Ulasan
-        const reviewerAvatar = rev.user?.foto || rev.user?.avatar || rev.foto_user || "";
+        const reviewerAvatar =
+          rev.user?.foto || rev.user?.avatar || rev.foto_user || "";
 
         // Ekstraksi Gambar & Nama Barang
         const itemImage =
-          rev.barang?.gambar || rev.gambar_barang || rev.gambar || detailBarang.gambar || "";
+          rev.barang?.gambar ||
+          rev.gambar_barang ||
+          rev.gambar ||
+          detailBarang.gambar ||
+          "";
         const itemName =
-          rev.barang?.nama_barang || rev.nama_barang || detailBarang.nama_barang || "Barang";
+          rev.barang?.nama_barang ||
+          rev.nama_barang ||
+          detailBarang.nama_barang ||
+          "Barang";
 
         return {
           ...rev,
@@ -103,6 +116,7 @@ export default function ReviewPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchReviewsAndBarang();
   }, []);
 
@@ -119,13 +133,18 @@ export default function ReviewPage() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-44 bg-slate-200/60 animate-pulse rounded-2xl" />
+                <div
+                  key={i}
+                  className="h-44 bg-slate-200/60 animate-pulse rounded-2xl"
+                />
               ))}
             </div>
           ) : isError ? (
             <div className="bg-rose-50 border border-rose-200 rounded-2xl p-8 text-center text-rose-700">
               <span className="material-symbols-outlined text-3xl">error</span>
-              <p className="mt-2 text-sm font-semibold">Gagal memuat ulasan barang.</p>
+              <p className="mt-2 text-sm font-semibold">
+                Gagal memuat ulasan barang.
+              </p>
               <button
                 onClick={fetchReviewsAndBarang}
                 className="mt-4 px-4 py-2 bg-rose-600 text-white rounded-xl text-xs font-bold"
@@ -135,8 +154,12 @@ export default function ReviewPage() {
             </div>
           ) : reviews.length === 0 ? (
             <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
-              <span className="material-symbols-outlined text-4xl text-slate-300">rate_review</span>
-              <h3 className="mt-3 text-base font-extrabold text-slate-900">Belum Ada Ulasan</h3>
+              <span className="material-symbols-outlined text-4xl text-slate-300">
+                rate_review
+              </span>
+              <h3 className="mt-3 text-base font-extrabold text-slate-900">
+                Belum Ada Ulasan
+              </h3>
               <p className="mt-1 text-xs text-slate-500">
                 Belum ada pengguna yang memberikan ulasan untuk barang.
               </p>
@@ -156,9 +179,11 @@ export default function ReviewPage() {
                       {/* INFORMASI BARANG */}
                       <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                         {rev.itemImage ? (
-                          <img
+                          <Image
                             src={rev.itemImage}
-                            alt={rev.itemName}
+                            alt={rev.itemName || "Gambar Produk"}
+                            width={48}
+                            height={48}
                             className="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0"
                           />
                         ) : (
@@ -178,7 +203,9 @@ export default function ReviewPage() {
                         </div>
                         {/* STAR RATING */}
                         <div className="flex items-center gap-1 bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-xl shrink-0">
-                          <span className="text-xs font-bold text-amber-700">{ratingNum}.0</span>
+                          <span className="text-xs font-bold text-amber-700">
+                            {ratingNum}.0
+                          </span>
                           <span className="material-symbols-outlined text-[16px] text-amber-400">
                             star
                           </span>
@@ -187,7 +214,7 @@ export default function ReviewPage() {
 
                       {/* KOMENTAR / ULASAN */}
                       <p className="mt-4 text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
-                        "{rev.komentar || "Tidak ada komentar."}"
+                        &quot;{rev.komentar || "Tidak ada komentar."}&quot;
                       </p>
                     </div>
 
@@ -195,9 +222,11 @@ export default function ReviewPage() {
                     <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         {rev.reviewerAvatar ? (
-                          <img
+                          <Image
                             src={rev.reviewerAvatar}
-                            alt={rev.reviewerName}
+                            alt={rev.reviewerName || "Avatar Penilai"}
+                            width={32}
+                            height={32}
                             className="w-8 h-8 rounded-full object-cover border border-slate-200"
                           />
                         ) : (
@@ -209,7 +238,9 @@ export default function ReviewPage() {
                           <p className="text-xs font-extrabold text-slate-900 leading-tight">
                             {rev.reviewerName}
                           </p>
-                          <p className="text-[10px] text-slate-400">Pemberi Ulasan</p>
+                          <p className="text-[10px] text-slate-400">
+                            Pemberi Ulasan
+                          </p>
                         </div>
                       </div>
 

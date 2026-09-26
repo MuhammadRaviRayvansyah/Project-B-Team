@@ -81,6 +81,7 @@ export default function DetailKelolaPeminjamanPage() {
   }, [idPeminjaman]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDataDetail();
   }, [fetchDataDetail]);
 

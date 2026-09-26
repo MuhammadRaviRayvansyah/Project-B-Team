@@ -116,6 +116,7 @@ export default function RiwayatSayaPage() {
   const { user } = useUser();
   const activeUser = user || getUserProfile();
 
+  
   const activeUserIdentifiers = useMemo(() => {
     const idsFromUser = findUserIdentifiers(activeUser);
     const idsFromToken = getUserIdFromToken();
@@ -209,6 +210,7 @@ export default function RiwayatSayaPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
   }, [activeUserIdentifiers]);
 
