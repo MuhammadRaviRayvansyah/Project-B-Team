@@ -12,37 +12,47 @@ export default function AuthGuard({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const token = getToken();
-    let currentUser = user;
+    setIsAuthorized(false);
 
-    if (!currentUser) {
-      const profile = getUserProfile();
-      if (profile) {
-        currentUser = profile;
-        setUser(profile);
-      }
+    const token = getToken();
+    let currentUser = user || getUserProfile();
+
+    if (!user && currentUser) {
+      setUser(currentUser);
     }
 
+    // Kelompok Halaman
     const isAuthPage = pathname === "/login" || pathname === "/register";
+    
+    // ------------------------------------------------------------------------
+    // /detail-barang DIHAPUS dari isPublicPage agar wajib LOGIN
+    // ------------------------------------------------------------------------
     const isPublicPage =
       pathname === "/" ||
       pathname === "/barang" ||
-      pathname.startsWith("/detail-barang") ||
       pathname === "/review";
-    const isAdminPage = pathname.startsWith("/dashboard") || pathname.startsWith("/manajemen-");
-    const isUserOnlyPage = pathname === "/peminjaman" || pathname === "/riwayat";
 
+    const isAdminPage =
+      pathname.startsWith("/dashboard") || pathname.startsWith("/manajemen-");
+    const isUserOnlyPage =
+      pathname === "/peminjaman" || pathname === "/riwayat";
+
+    // 1. Pengguna BELUM LOGIN
     if (!token || !currentUser) {
       if (!isPublicPage && !isAuthPage) {
+        // Jika mencoba direct URL ke /detail-barang (atau halaman proteksi lain), lempar ke /login
         router.replace("/login");
       } else {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsAuthorized(true);
       }
       return;
     }
 
-    const role = String(currentUser.role || "").trim().toLowerCase() === "admin" ? "admin" : "user";
+    // 2. Pengguna SUDAH LOGIN
+    const role =
+      String(currentUser.role || "").trim().toLowerCase() === "admin"
+        ? "admin"
+        : "user";
 
     if (role === "admin") {
       if (isAuthPage) {
@@ -56,13 +66,21 @@ export default function AuthGuard({ children }) {
       if (isAdminPage || isAuthPage) {
         router.replace("/barang");
       } else {
+        // User biasa sekarang BISA mengakses /detail-barang setelah login
         setIsAuthorized(true);
       }
     }
   }, [pathname, user, router, setUser]);
 
   if (!isAuthorized) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f7f9ff]">
+        <div className="inline-flex items-center gap-2.5 text-slate-500 text-xs font-semibold">
+          <span className="w-4 h-4 border-2 border-slate-300 border-t-slate-800 rounded-full animate-spin" />
+          <span>Memeriksa hak akses...</span>
+        </div>
+      </div>
+    );
   }
 
   return <>{children}</>;
