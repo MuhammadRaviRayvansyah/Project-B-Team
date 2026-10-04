@@ -1,24 +1,28 @@
+"use client";
 
-export default function Header({
-  category,
-  title,
-  description,
-}) {
+import { motion } from "framer-motion";
+
+export default function Header({ category, title, description }) {
   return (
-    <section className="pt-10 pb-8 border-b border-slate-200">
-      <div className="max-w-3xl">
-        <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-amber-400 text-slate-900 text-[11px] font-extrabold uppercase tracking-widest">
+    <section className="pt-8 pb-6 border-b border-slate-800/80">
+      <motion.div
+        className="max-w-3xl space-y-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-400 text-xs font-bold uppercase tracking-widest">
           {category}
         </span>
 
-        <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
           {title}
         </h1>
 
-        <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
           {description}
         </p>
-      </div>
+      </motion.div>
     </section>
   );
 }

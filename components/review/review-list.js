@@ -11,15 +11,16 @@ export default function ReviewList({ id_barang, ulasan = [], onAddUlasan }) {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="text-xs font-semibold text-slate-700 hover:underline flex items-center gap-1"
+        className="text-xs font-semibold text-slate-300 hover:text-amber-400 flex items-center gap-1 transition-colors cursor-pointer"
       >
         {ulasan.length > 0 ? `Ulasan (${ulasan.length})` : "Tulis Ulasan"}
         <span className="material-symbols-outlined text-base">
           {open ? "expand_less" : "expand_more"}
         </span>
       </button>
+
       {open && (
-        <div className="mt-2">
+        <div className="mt-3 space-y-4">
           {ulasan.length === 0 ? (
             <p className="text-xs text-slate-500">
               Belum ada ulasan. Jadi yang pertama!
@@ -29,15 +30,17 @@ export default function ReviewList({ id_barang, ulasan = [], onAddUlasan }) {
               {ulasan.map((u, i) => (
                 <div
                   key={u.id_review || i}
-                  className="text-xs border-b border-slate-100 pb-2"
+                  className="text-xs border-b border-slate-800/80 pb-3"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-900">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-bold text-slate-200">
                       {u.nama_user || u.nama || `User #${u.id_user}`}
                     </span>
                     <RatingStars rating={u.rating} size={14} />
                   </div>
-                  <p className="text-slate-500 mt-0.5">{u.komentar}</p>
+                  <p className="text-slate-400 leading-relaxed font-normal">
+                    {u.komentar}
+                  </p>
                 </div>
               ))}
             </div>

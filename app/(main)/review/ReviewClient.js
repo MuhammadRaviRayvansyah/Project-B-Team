@@ -12,38 +12,48 @@ export default function ReviewClient({ barangList, reviewList }) {
   );
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
-      <label className="block text-sm font-bold text-slate-900 mb-3">
+    <div className="bg-[#091823]/80 border border-slate-800/80 backdrop-blur-md p-5 sm:p-6 rounded-2xl shadow-xl">
+      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
         Pilih Barang yang Ingin Direview
       </label>
       <select
         value={selectedId}
         onChange={(e) => setSelectedId(e.target.value)}
-        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 mb-6"
+        className="w-full bg-slate-900/90 text-slate-200 border border-slate-800 rounded-xl px-4 py-3 text-xs sm:text-sm font-medium focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all mb-6 cursor-pointer"
       >
-        <option value="">-- Silakan Pilih Barang --</option>
+        <option value="" className="bg-[#091823] text-slate-400">
+          -- Silakan Pilih Barang --
+        </option>
         {barangList.map((item) => (
-          <option key={item.id_barang || item.id} value={item.id_barang || item.id}>
+          <option
+            key={item.id_barang || item.id}
+            value={item.id_barang || item.id}
+            className="bg-[#091823] text-slate-200 py-1"
+          >
             {item.nama_barang || item.nama}
           </option>
         ))}
       </select>
 
       {selectedId ? (
-        <div className="border-t border-slate-100 pt-6">
-          <h3 className="text-sm font-bold text-slate-900 mb-4">
+        <div className="border-t border-slate-800/80 pt-6">
+          <h3 className="text-sm font-bold text-slate-200 mb-4">
             Daftar Ulasan Barang Ini
           </h3>
-          <ReviewList 
-            id_barang={selectedId} 
-            ulasan={filteredReviews} 
-            onAddUlasan={createReviewAction} 
+          <ReviewList
+            id_barang={selectedId}
+            ulasan={filteredReviews}
+            onAddUlasan={createReviewAction}
           />
         </div>
       ) : (
-        <div className="text-center py-10 border-t border-slate-100 flex flex-col items-center">
-          <span className="material-symbols-outlined text-slate-300 text-4xl mb-2">inventory_2</span>
-          <p className="text-sm text-slate-500">Pilih barang di atas untuk melihat atau menulis ulasan.</p>
+        <div className="text-center py-10 border-t border-slate-800/80 flex flex-col items-center">
+          <span className="material-symbols-outlined text-slate-600 text-4xl mb-2">
+            inventory_2
+          </span>
+          <p className="text-xs text-slate-400">
+            Pilih barang di atas untuk melihat atau menulis ulasan.
+          </p>
         </div>
       )}
     </div>
