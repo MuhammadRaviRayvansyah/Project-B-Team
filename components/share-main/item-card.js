@@ -1,7 +1,12 @@
+
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
+import {
+  ArrowRight,
+  Star,
+} from "lucide-react";
 
 export default function ItemCard({
   id_barang,
@@ -14,7 +19,7 @@ export default function ItemCard({
   ulasan = [],
 }) {
   const [imgSrc, setImgSrc] = useState(
-    gambar || "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=500"
+    "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=500"
   );
 
   const isAvailable = Number(stok) > 0;
@@ -29,12 +34,13 @@ export default function ItemCard({
     : null;
 
   return (
-    <Link 
+    <Link
       href={`/detail-barang/${id_barang}`}
-      className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200/80 p-3.5 hover:border-amber-400 hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300"
+      className="group rounded-2xl bg-slate-900/50 border border-white/10 overflow-hidden hover:border-amber-400/50 hover:bg-slate-900/80 transition-all duration-300 flex flex-col h-full backdrop-blur-md"
     >
-      {/* 1. BAGIAN ATAS: Gambar & Badge Ketersediaan */}
-      <div className="w-full aspect-[4/5] bg-slate-100 rounded-xl overflow-hidden relative mb-3.5 shrink-0">
+      {/* ================= GAMBAR ================= */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-slate-800">
+
         <img
           src={imgSrc}
           alt={nama_barang}
@@ -43,82 +49,98 @@ export default function ItemCard({
               "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=500"
             )
           }
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
 
-        {/* Badge Status / Ketersediaan */}
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/10 to-transparent pointer-events-none" />
+
+        {/* Badge Ketersediaan */}
         {isAvailable ? (
-          <span className="absolute top-2.5 right-2.5 px-2.5 py-1 bg-white/95 backdrop-blur-md rounded-full text-[10px] font-bold text-emerald-700 shadow-sm border border-emerald-100 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="absolute top-3 left-3 bg-emerald-400 text-slate-950 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md shadow-md">
             Tersedia
           </span>
         ) : (
-          <span className="absolute top-2.5 right-2.5 px-2.5 py-1 bg-rose-500/95 backdrop-blur-md text-white rounded-full text-[10px] font-bold shadow-sm flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-white" />
+          <span className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md shadow-md">
             Stok Habis
           </span>
         )}
+
+        {/* Ukuran */}
+        <span className="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md border border-white/10 text-slate-300 text-[11px] px-2.5 py-1 rounded-md">
+          Ukuran: {ukuran && ukuran !== "-" ? ukuran : "All Size"}
+        </span>
       </div>
 
-      {/* Konten Card */}
-      <div className="flex-1 flex flex-col justify-between space-y-3">
-        {/* 2. BAGIAN UTAMA: Nama, Kategori, Ukuran */}
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="px-2 py-0.5 rounded-md bg-slate-100 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
+      {/* ================= KONTEN ================= */}
+      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+
+        {/* Kategori & Nama */}
+        <div>
+          <div className="flex items-center gap-2 flex-wrap mb-1.5">
+            <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
               {nama_kategori || "Pakaian"}
-            </span>
-            <span className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200 text-[10px] font-semibold text-slate-500">
-              {ukuran && ukuran !== "-" ? `Ukuran ${ukuran}` : "All Size"}
             </span>
           </div>
 
-          <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-amber-600 transition-colors line-clamp-2 leading-snug">
+          <h3 className="text-base font-bold text-white group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
             {nama_barang}
           </h3>
         </div>
 
-        {/* 3. BAGIAN INFORMASI: Harga Sewa, Stok, Rating */}
-        <div className="pt-2 border-t border-slate-100 space-y-1.5">
-          <div className="flex items-baseline justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Harga Sewa
+        {/* ================= INFORMASI ================= */}
+        <div className="pt-3 border-t border-white/5">
+
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] text-slate-400 block">
+              Sewa / Hari
             </span>
-            <span className="text-[11px] font-semibold text-slate-600">
+
+            <span className="text-[10px] text-slate-400">
               Sisa {stok || 0} unit
             </span>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
+
             <div className="flex items-baseline gap-1">
-              <span className="text-sm sm:text-base font-black text-slate-900">
+              <span className="text-base font-extrabold text-amber-400">
                 Rp {Number(harga_sewa || 0).toLocaleString("id-ID")}
               </span>
-              <span className="text-[10px] text-slate-400 font-medium">/ hari</span>
+
+              <span className="text-[10px] text-slate-400">
+                / hari
+              </span>
             </div>
 
             {hasReviews ? (
-              <div className="flex items-center gap-1 text-amber-500 font-bold text-xs">
-                <span className="material-symbols-outlined text-[15px]">star</span>
+              <div className="flex items-center gap-1 text-amber-400 font-bold text-xs">
+                <Star className="w-3.5 h-3.5 fill-current" />
                 <span>{avgRating}</span>
-                <span className="text-slate-400 font-normal text-[10px]">({ulasan.length})</span>
+
+                <span className="text-slate-500 font-normal text-[10px]">
+                  ({ulasan.length})
+                </span>
               </div>
             ) : (
-              <span className="text-[10px] text-slate-400 font-medium">Belum ada review</span>
+              <span className="text-[10px] text-slate-500">
+                Belum ada review
+              </span>
             )}
           </div>
         </div>
 
-        {/* 4. BAGIAN BAWAH: Tombol Aksi Detail */}
-        <div className="pt-2">
-          <div className="w-full py-2 px-3 rounded-xl bg-slate-900 group-hover:bg-amber-400 text-white group-hover:text-slate-900 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-xs">
+        {/* ================= TOMBOL ================= */}
+        <div>
+          <div className="w-full px-3 py-2.5 rounded-xl bg-white/5 hover:bg-amber-400 border border-white/10 hover:border-amber-400 text-white hover:text-slate-950 font-bold text-xs transition-all flex items-center justify-center gap-1.5">
             <span>Lihat Detail & Pinjam</span>
-            <span className="material-symbols-outlined text-[15px] group-hover:translate-x-0.5 transition-transform">
-              arrow_forward
-            </span>
+
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
+
       </div>
     </Link>
   );
 }
+
